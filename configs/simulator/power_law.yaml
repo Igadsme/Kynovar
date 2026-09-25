@@ -1,0 +1,53 @@
+# Hidden pairwise law for generated universes:
+#   F_ij = k * m_i * m_j / r_ij^p
+# Positive k is attractive. NumPy sampling is half-open on the right: [low, high).
+version: 1
+dimension: 2
+integrator: semi_implicit_euler
+default_dt: 0.01
+pairwise:
+  k_range: [0.5, 10.0]
+  p_range: [0.5, 4.0]
+  softening: 1.0e-8
+bodies:
+  count_range: [2, 4]
+  mass_range: [0.5, 5.0]
+  radius_range: [0.05, 0.3]
+  position_range: [-2.0, 2.0]
+  velocity_range: [-0.5, 0.5]
+  minimum_center_distance: 0.4
+  placement_attempts: 200
+collisions:
+  # Disabled so a power-law universe has one hidden continuous law.
+  enabled: false
+  restitution: null
+difficulty:
+  default: 2
+  levels:
+    1:
+      implemented: true
+      description: Unknown scalar coefficient. Pairwise exponent is fixed.
+      sample: [k]
+      fixed_exponent: 2.0
+    2:
+      implemented: true
+      description: Unknown coefficient and unknown exponent of a pairwise power law.
+      sample: [k, p]
+    3:
+      implemented: false
+      description: Multiple simultaneous force laws.
+    4:
+      implemented: false
+      description: Drag.
+    5:
+      implemented: false
+      description: Collisions.
+    6:
+      implemented: false
+      description: Nonlinear laws beyond a single power.
+    7:
+      implemented: false
+      description: Piecewise laws.
+    8:
+      implemented: false
+      description: Physics that changes during operation.

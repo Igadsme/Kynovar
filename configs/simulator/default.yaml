@@ -1,0 +1,14 @@
+# Continuous force laws implemented by the 2D simulator.
+# Collision response is impulsive and is not a continuous force law.
+version: 1
+dimension: 2
+integrator: semi_implicit_euler
+default_dt: 0.01
+continuous_force_laws:
+  - constant_gravity
+  - pairwise_power_law
+  - linear_drag
+  - quadratic_drag
+  - spring
+impulsive:
+  - collision
