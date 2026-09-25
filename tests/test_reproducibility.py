@@ -7,7 +7,7 @@ from kynovar.utils.reproducibility import runtime_record
 def test_runtime_record_has_no_law_parameters() -> None:
     record = runtime_record(find_repo_root())
     assert record["project"] == "kynovar"
-    assert record["version"] == "0.1.0"
+    assert record["version"] == "0.2.0"
     assert record["python"]
     assert record["numpy"]
     assert "seed" not in record

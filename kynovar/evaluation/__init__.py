@@ -1,5 +1,5 @@
-"""Operator export of hidden laws. Not part of the observation API."""
+"""Evaluation helpers.
 
-from kynovar.evaluation.ground_truth import ground_truth_record
-
-__all__ = ["ground_truth_record"]
+Hidden-law export lives in `kynovar.evaluation.ground_truth` and is imported
+only by operator and scoring code. Prediction metrics do not import it.
+"""

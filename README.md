@@ -2,7 +2,7 @@
 
 Autonomous discovery of physical laws.
 
-**Milestone 1 is implemented. Later milestones are not.** There are no trained models, recovered equations, or benchmark tables yet. Numbers in this repository come from the simulator and its tests.
+**Milestone 1 is complete. Milestone 2 trains dynamics models on observable trajectories.** Symbolic law discovery, experiment planning, and the web interface are not implemented. Benchmark numbers in [docs/milestone-2.md](docs/milestone-2.md) were measured on this machine. They are not targets.
 
 ## What is Kynovar?
 
@@ -51,14 +51,15 @@ kynovar/simulator/     2D state, semi-implicit Euler, force laws, collisions
 kynovar/simulator/universe.py
                        difficulty 1–2 pairwise power-law worlds
 kynovar/laboratory/    Experiment and Laboratory.run
-kynovar/evaluation/    ground-truth export for scoring only
-kynovar/utils/         path validation and run metadata
-configs/simulator/     force-law list and sampling ranges
-scripts/simulate_world.py
-tests/
+kynovar/data/          observable datasets, universe splits, streaming, normalization
+kynovar/models/        constant velocity, linear, MLP, GRU, and the dynamics GNN
+kynovar/evaluation/    ground-truth export, rollout metrics, benchmark reports
+kynovar/utils/         path validation, device selection, run metadata
+configs/experiments/   smoke, development, and research training configs
+scripts/               simulate_world, generate_dataset, train_dynamics, run_benchmark, run_ood
 ```
 
-Reserved directories exist and contain no scientific code: `models/`, `discovery/`, `theory/`, `uncertainty/`, `planning/`, `falsification/`, `backend/`, `frontend/`, `paper/`.
+Reserved directories still have no scientific code: `discovery/`, `theory/`, `uncertainty/`, `planning/`, `falsification/`, `backend/`, `frontend/`, `paper/`.
 
 `World.observe()` returns kinematics. `World.internal_state()` also returns hidden laws and is for evaluation. The laboratory accepts initial conditions, duration, and timestep. It does not accept force parameters. Details are in [docs/milestone-1.md](docs/milestone-1.md).
 
@@ -87,7 +88,7 @@ Difficulty 1 samples `k` and fixes `p = 2`. Difficulty 2 samples both `k` and `p
 
 ## Results
 
-No discovery results exist.
+Milestone 2 results are in [docs/milestone-2.md](docs/milestone-2.md) and `results/benchmarks/development/`. On the development test universes, constant velocity is a strong baseline. The GRU had the lowest full-trajectory position RMSE in that run. The GNN did not beat it. There are no recovered equations.
 
 The simulator checks that do exist are unit tests against closed-form updates, including:
 
@@ -99,11 +100,11 @@ The simulator checks that do exist are unit tests against closed-form updates, i
 - momentum conservation under the pairwise law
 - identical trajectories from identical seeds
 
-The latest local run was **70 passed in 0.84s** (Python 3.12.4, NumPy 2.5.3, pytest 9.1.1) on an Apple M1.
+The latest local run was **86 passed in 9.68s** (Python 3.12.4, NumPy 2.5.3, PyTorch 2.14.0, pytest 9.1.1) on an Apple M1. Seventy of those tests are the Milestone 1 suite.
 
 ## Benchmarks
 
-No model benchmarks exist. `make evaluate` exits with an error for that reason.
+`make evaluate` runs the development benchmark and writes `results/benchmarks/development/`. The measured table is copied in [docs/milestone-2.md](docs/milestone-2.md). Re-running without `--retrain` reuses checkpoints.
 
 ## Installation
 
@@ -118,7 +119,7 @@ make test
 
 `make setup` creates `.venv` with `python3 -m venv --copies`, removes AppleDouble sidecar files, and installs the package in editable mode.
 
-Dependencies for this milestone: NumPy, PyYAML, and pytest. PyTorch is not installed. Device selection arrives with the dynamics model.
+Dependencies: NumPy, PyYAML, PyTorch, Matplotlib, and pytest. Device selection prefers MPS, then CUDA, then CPU. This machine used MPS.
 
 Copy `.env.example` to `.env` only if you need to override paths. Empty values use directories under the repository. Startup rejects project paths outside the repository unless `KYNOVAR_DATA_ROOT` is set, and it points `HF_HOME`, `TORCH_HOME`, and `XDG_CACHE_HOME` at `<repo>/.cache` for the process.
 
@@ -137,7 +138,12 @@ Add `--write-ground-truth results/evaluation/ground_truth.json` when an evaluati
 
 ## Train dynamics model
 
-Not implemented. `make train` exits with an error.
+```bash
+export COPYFILE_DISABLE=1
+.venv/bin/python scripts/train_dynamics.py --config configs/experiments/development.yaml --model gnn
+```
+
+`make train` runs that GNN command. Dataset generation, the other baselines, rollout evaluation, and OOD evaluation are documented in [docs/milestone-2.md](docs/milestone-2.md).
 
 ## Run discovery
 
@@ -145,7 +151,7 @@ Not implemented. `make discover` exits with an error.
 
 ## Run evaluation
 
-Hidden laws can be exported with `kynovar.evaluation.ground_truth.ground_truth_record` or the script flag above. There is no discovery score to evaluate.
+Hidden laws can still be exported with `kynovar.evaluation.ground_truth.ground_truth_record` or `--write-ground-truth`. Dynamics benchmarks are a different evaluation: `make evaluate` compares predictors on observable trajectories and does not score equation recovery.
 
 ## Web interface
 
@@ -180,4 +186,5 @@ Not started. The `paper/` directory is a placeholder path for a later scaffold.
 - Space has no walls.
 - The observation boundary is an API contract. A Python caller who already holds a `World` can call `internal_state()`. Discovery code must not do that. The public id is a short hash of the seed, so a caller who brute-forces small seeds and reruns the generator could recover the law. The laboratory return value does not include the seed.
 - ExFAT creates `._*` AppleDouble files. `make setup` deletes them inside `.venv`. Set `COPYFILE_DISABLE=1` in the shell used for development.
-- No datasets, models, symbolic regression, uncertainty estimates, experiment planner, falsifier, backend, or frontend are implemented.
+- Dynamics models see only `World.observe()`. The development test split has two universes, and stiff forces eject many bodies, so full-trajectory RMSE is a noisy summary. See [docs/milestone-2.md](docs/milestone-2.md).
+- No symbolic regression, uncertainty estimates, experiment planner, falsifier, backend, or frontend are implemented.

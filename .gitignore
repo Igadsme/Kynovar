@@ -19,9 +19,14 @@ datasets/generated/**
 !datasets/generated/.gitkeep
 datasets/processed/**
 !datasets/processed/.gitkeep
+datasets/splits/**
+!datasets/splits/.gitkeep
 checkpoints/**
 !checkpoints/.gitkeep
-results/**
+results/*
 !results/.gitkeep
+!results/benchmarks/
+!results/ood/
+!results/plots/
 logs/**
 !logs/.gitkeep

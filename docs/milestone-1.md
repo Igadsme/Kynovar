@@ -1,6 +1,6 @@
 # Milestone 1 — Universe
 
-Status: implemented and tested on this machine. Milestone 2 has not been started.
+Status: complete. Dynamics prediction is Milestone 2 and is documented in [milestone-2.md](milestone-2.md).
 
 ## What works
 

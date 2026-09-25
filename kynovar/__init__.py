@@ -1,7 +1,7 @@
 """Kynovar: autonomous discovery of physical laws in unknown worlds.
 
-Milestone 1 provides a deterministic 2D simulator, hidden universes, and a
-laboratory experiment API. Later milestones add learning and discovery.
+Milestone 1 is the deterministic simulator and laboratory.
+Milestone 2 trains dynamics models on observable trajectories.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

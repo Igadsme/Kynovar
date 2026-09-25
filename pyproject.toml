@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kynovar"
-version = "0.1.0"
+version = "0.2.0"
 description = "Autonomous discovery of physical laws in unknown dynamical systems."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -13,6 +13,8 @@ authors = [{ name = "Kynovar contributors" }]
 dependencies = [
     "numpy>=1.26",
     "pyyaml>=6",
+    "torch>=2.2",
+    "matplotlib>=3.8",
 ]
 
 [project.optional-dependencies]

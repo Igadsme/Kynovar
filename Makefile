@@ -19,7 +19,16 @@ setup:
 test:
 	$(PYTHON) -m pytest
 
-generate train discover evaluate web:
-	@echo "This target is not implemented yet. Current milestone: 1 (universe simulator)." >&2
-	@echo "See docs/milestone-1.md." >&2
+generate:
+	$(PYTHON) scripts/generate_dataset.py --config configs/experiments/development.yaml
+
+train:
+	$(PYTHON) scripts/train_dynamics.py --config configs/experiments/development.yaml --model gnn
+
+evaluate:
+	$(PYTHON) scripts/run_benchmark.py --config configs/experiments/development.yaml
+
+discover web:
+	@echo "This target is not implemented yet. Current milestone: 2 (dynamics prediction)." >&2
+	@echo "See docs/milestone-2.md." >&2
 	@exit 1
