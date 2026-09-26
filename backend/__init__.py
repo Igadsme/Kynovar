@@ -1,0 +1,1 @@
+"""Kynovar web backend."""

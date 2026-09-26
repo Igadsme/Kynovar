@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections import OrderedDict
 from pathlib import Path
 
 import numpy as np
@@ -16,8 +17,10 @@ from kynovar.simulator.boundary import assert_public_record
 class TrajectoryStore:
     """Manifest plus on-demand npz reads. The full dataset is not kept in memory."""
 
-    def __init__(self, root: Path) -> None:
+    def __init__(self, root: Path, cache_items: int = 256) -> None:
         self.root = Path(root)
+        self.cache_items = cache_items
+        self._cache: OrderedDict[tuple[str, int], np.ndarray] = OrderedDict()
         manifest_path = self.root / "manifest.json"
         self.manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         assert_public_record(self.manifest)
@@ -41,11 +44,21 @@ class TrajectoryStore:
         raise KeyError(universe_id)
 
     def load_states(self, universe_id: str, experiment_index: int) -> np.ndarray:
+        """One experiment. A bounded LRU keeps at most `cache_items` decoded arrays."""
+        key = (universe_id, experiment_index)
+        cached = self._cache.get(key)
+        if cached is not None:
+            self._cache.move_to_end(key)
+            return cached.copy()
         record = self.universe_record(universe_id)
         path = self.root / str(record["file"])
         archive = self._archive(path)
-        states = np.asarray(archive[f"states_{experiment_index:04d}"], dtype=np.float32)
-        return np.array(states, dtype=np.float32, copy=True)
+        states = np.array(archive[f"states_{experiment_index:04d}"], dtype=np.float32, copy=True)
+        if self.cache_items > 0:
+            self._cache[key] = states
+            while len(self._cache) > self.cache_items:
+                self._cache.popitem(last=False)
+        return states.copy()
 
     def iter_split(self, universe_ids: list[str]):
         wanted = set(universe_ids)
@@ -64,6 +77,7 @@ class TrajectoryStore:
         return self._open_file
 
     def close(self) -> None:
+        self._cache.clear()
         if self._open_file is not None:
             self._open_file.close()
             self._open_file = None

@@ -1,0 +1,38 @@
+name: controlled-2body
+models: [constant_velocity, linear, mlp, gnn, interaction_gnn_single]
+rollout_comparison_model: interaction_gnn_single
+dataset:
+  regime: controlled_two_body
+  worlds: 30
+  experiments_per_world: 8
+  duration: 2.0
+  dt: 0.01
+  difficulty: 2
+  seed: 303
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  seed: 303
+train:
+  epochs: 20
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  seed: 303
+  device: auto
+  sequence_length: 1
+  stride: 2
+  rollout_steps: 1
+  hidden_dim: 64
+  gnn_layers: 2
+  patience: 5
+  lambda_acceleration: 1.0
+  lambda_position: 1.0
+  lambda_velocity: 1.0
+  lambda_rollout: 1.0
+  relative_acceleration: 1.0
+eval:
+  horizons: [1, 10, 25, 50, 100, 150]
+  stride: 5
+  num_workers: 0

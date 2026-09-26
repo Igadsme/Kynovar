@@ -1,0 +1,46 @@
+{
+  "config": "development",
+  "model": "gnn",
+  "trainable_parameters": 38066,
+  "samples": 1300,
+  "predicted_acceleration_norm": {
+    "mean": 0.24625787138938904,
+    "median": 0.017422787845134735,
+    "p95": 1.6486105918884277,
+    "max": 4.453082084655762
+  },
+  "actual_acceleration_norm": {
+    "mean": 8.850050926208496,
+    "median": 3.293079498689622e-05,
+    "p95": 4.354651927947998,
+    "max": 1870.304443359375
+  },
+  "prediction_to_truth_norm_ratio_median": 544.9396362304688,
+  "component_correlation": 0.0372279805737038,
+  "acceleration_rmse": 70.78662872314453,
+  "zero_prediction_rmse": 70.80191802978516,
+  "gradient_norm_mean_by_module": {
+    "node_encoder": 0.5384197178564663,
+    "edge_encoder": 0.24189587252382422,
+    "messages": 0.28974865161082153,
+    "updates": 0.23017555809668813,
+    "head": 0.40550812455610585
+  },
+  "activation_norm_mean_by_module": {
+    "node_encoder": 36.97398702914898,
+    "edge_encoder": 19.358544184611393,
+    "messages.0": 37.23711351247934,
+    "updates.0": 45.57074368917025,
+    "messages.1": 34.80518548305218,
+    "updates.1": 2.339981679732983,
+    "head": 1.2216912691409771
+  },
+  "normalizer_accel_scale": [
+    0.1752515584230423,
+    0.17940537631511688
+  ],
+  "normalizer_position_scale": [
+    2.8733532428741455,
+    2.9522697925567627
+  ]
+}

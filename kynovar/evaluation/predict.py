@@ -35,9 +35,15 @@ def prediction_loss(
         predicted_acc = model.acceleration(history[:, -history_length:], mask)
         if step == 0:
             true_acc = states[:, history_length - 1, :, 4:6]
-            total = total + weights["acceleration"] * _normalized_huber(
-                predicted_acc, true_acc, model.normalizer.accel_std, mask, denom
-            )
+            if weights.get("relative_acceleration", 0.0):
+                scale = true_acc.norm(dim=-1, keepdim=True) + model.normalizer.accel_std.mean()
+                total = total + weights["acceleration"] * _normalized_huber(
+                    predicted_acc / scale, true_acc / scale, torch.ones_like(model.normalizer.accel_std), mask, denom
+                )
+            else:
+                total = total + weights["acceleration"] * _normalized_huber(
+                    predicted_acc, true_acc, model.normalizer.accel_std, mask, denom
+                )
         position, velocity = semi_implicit_euler(position, velocity, predicted_acc, dt)
         truth = states[:, history_length + step]
         position_loss = _normalized_huber(position, truth[..., 0:2], model.normalizer.node_std[:2], mask, denom)

@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from kynovar.data.initial_conditions import sample_bodies
+from kynovar.data.regimes import Acceptance, load_regimes
 from kynovar.data.schema import SCHEMA_VERSION, STATE_FEATURES
 from kynovar.laboratory import Experiment, Laboratory
 from kynovar.simulator.boundary import assert_public_record
@@ -32,6 +33,8 @@ class GenerationSettings:
     dataset_seed: int
     difficulty: int
     config: UniverseConfig
+    acceptance: Acceptance | None = None
+    regime: str | None = None
 
     def signature(self) -> str:
         payload = {
@@ -51,6 +54,9 @@ class GenerationSettings:
             "velocity_range": list(self.config.velocity_range),
             "minimum_center_distance": self.config.minimum_center_distance,
         }
+        if self.acceptance is not None:
+            payload["acceptance"] = self.acceptance.as_dict()
+            payload["regime"] = self.regime
         encoded = json.dumps(payload, sort_keys=True).encode("utf-8")
         return hashlib.sha256(encoded).hexdigest()
 
@@ -72,7 +78,13 @@ class GenerationSettings:
             "position_range": list(self.config.position_range),
             "velocity_range": list(self.config.velocity_range),
             "minimum_center_distance": self.config.minimum_center_distance,
+            "acceptance": None if self.acceptance is None else self.acceptance.as_dict(),
+            "regime": self.regime,
         }
+
+
+class RejectedUniverse(RuntimeError):
+    """No accepted experiment was found for one universe within the attempt budget."""
 
 
 def mix_seed(*parts: int) -> int:
@@ -152,44 +164,71 @@ def generate_dataset(output_dir: Path, settings: GenerationSettings) -> dict[str
 
 
 def _write_universe(path: Path, index: int, settings: GenerationSettings) -> dict[str, object]:
-    universe_seed = mix_seed(settings.dataset_seed, index, 1)
-    world = generate_universe(universe_seed, difficulty=settings.difficulty, config=settings.config)
-    laboratory = Laboratory(world)
-    payload: dict[str, np.ndarray] = {}
-    experiment_meta = []
-    experiment_ids = []
-    for experiment_index in range(settings.experiments_per_world):
-        body_seed = mix_seed(settings.dataset_seed, index, experiment_index, 2)
-        bodies = sample_bodies(np.random.Generator(np.random.PCG64(body_seed)), settings.config)
-        experiment_id = f"E-{experiment_index:04d}"
-        trajectory = laboratory.run(
-            Experiment(
-                objects=bodies,
-                duration=settings.duration,
-                dt=settings.dt,
-                experiment_id=experiment_id,
-            )
-        )
-        states, ids = trajectory_arrays(trajectory)
-        payload[f"states_{experiment_index:04d}"] = states
-        payload[f"ids_{experiment_index:04d}"] = ids
-        experiment_ids.append(experiment_id)
-        experiment_meta.append(
-            {
-                "experiment_id": experiment_id,
-                "frames": int(states.shape[0]),
-                "bodies": int(states.shape[1]),
-            }
-        )
+    replacements = 0
+    while True:
+        # Replacement 0 reproduces the original seed stream for unfiltered datasets.
+        parts = (settings.dataset_seed, index, 1) if replacements == 0 else (settings.dataset_seed, index, 1, replacements)
+        world = generate_universe(mix_seed(*parts), difficulty=settings.difficulty, config=settings.config)
+        try:
+            payload, experiment_meta, experiment_ids = _run_experiments(world, index, replacements, settings)
+            break
+        except RejectedUniverse:
+            replacements += 1
+            if replacements > 50:
+                raise DatasetGenerationError(
+                    f"Universe slot {index}: 50 replacement universes had no accepted experiment."
+                ) from None
     payload["experiment_ids"] = np.asarray(experiment_ids)
     partial = path.with_name(path.stem + ".partial.npz")
     np.savez_compressed(partial, **payload)
     partial.replace(path)
-    return {
+    meta: dict[str, object] = {
         "universe_id": world.universe_id,
         "file": f"universes/{path.name}",
         "experiments": experiment_meta,
     }
+    if settings.acceptance is not None:
+        meta["replacements"] = replacements
+    return meta
+
+
+def accept_trajectory(states: np.ndarray, acceptance: Acceptance | None) -> bool:
+    return acceptance is None or acceptance.accepts(states)
+
+
+def _run_experiments(world, index: int, replacement: int, settings: GenerationSettings):
+    laboratory = Laboratory(world)
+    payload: dict[str, np.ndarray] = {}
+    experiment_meta = []
+    experiment_ids = []
+    budget = 1 if settings.acceptance is None else settings.acceptance.max_attempts
+    for experiment_index in range(settings.experiments_per_world):
+        experiment_id = f"E-{experiment_index:04d}"
+        accepted = None
+        for attempt in range(budget):
+            if replacement == 0 and attempt == 0:
+                body_seed = mix_seed(settings.dataset_seed, index, experiment_index, 2)
+            else:
+                body_seed = mix_seed(settings.dataset_seed, index, experiment_index, 2, replacement, attempt)
+            bodies = sample_bodies(np.random.Generator(np.random.PCG64(body_seed)), settings.config)
+            trajectory = laboratory.run(
+                Experiment(objects=bodies, duration=settings.duration, dt=settings.dt, experiment_id=experiment_id)
+            )
+            states, ids = trajectory_arrays(trajectory)
+            if accept_trajectory(states, settings.acceptance):
+                accepted = (states, ids, attempt + 1)
+                break
+        if accepted is None:
+            raise RejectedUniverse(world.universe_id)
+        states, ids, attempts = accepted
+        payload[f"states_{experiment_index:04d}"] = states
+        payload[f"ids_{experiment_index:04d}"] = ids
+        experiment_ids.append(experiment_id)
+        record = {"experiment_id": experiment_id, "frames": int(states.shape[0]), "bodies": int(states.shape[1])}
+        if settings.acceptance is not None:
+            record["attempts"] = attempts
+        experiment_meta.append(record)
+    return payload, experiment_meta, experiment_ids
 
 
 def _read_completed(path: Path) -> dict[int, dict[str, object]]:
@@ -218,7 +257,14 @@ def default_settings(
     dataset_seed: int,
     difficulty: int = 2,
     config: UniverseConfig | None = None,
+    regime: str | None = None,
 ) -> GenerationSettings:
+    base = config or load_power_law_config()
+    acceptance = None
+    if regime is not None:
+        chosen = load_regimes()[regime]
+        base = chosen.config(base)
+        acceptance = chosen.acceptance
     return GenerationSettings(
         name=name,
         worlds=worlds,
@@ -227,5 +273,7 @@ def default_settings(
         dt=dt,
         dataset_seed=dataset_seed,
         difficulty=difficulty,
-        config=config or load_power_law_config(),
+        config=base,
+        acceptance=acceptance,
+        regime=regime,
     )

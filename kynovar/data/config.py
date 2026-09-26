@@ -37,6 +37,13 @@ class RunConfig:
     lambda_position: float
     lambda_velocity: float
     lambda_rollout: float
+    regime: str | None = None
+    models: tuple[str, ...] = ("constant_velocity", "linear", "mlp", "gru", "gnn")
+    relative_acceleration: float = 0.0
+    eval_stride: int = 1
+    ood_worlds: int = 4
+    ood_experiments: int = 2
+    rollout_comparison_model: str = "gnn"
 
     @property
     def loss_weights(self) -> dict[str, float]:
@@ -45,6 +52,7 @@ class RunConfig:
             "position": self.lambda_position,
             "velocity": self.lambda_velocity,
             "rollout": self.lambda_rollout,
+            "relative_acceleration": self.relative_acceleration,
         }
 
 
@@ -83,6 +91,13 @@ def load_run_config(path: Path) -> RunConfig:
         lambda_position=float(train.get("lambda_position", 1.0)),
         lambda_velocity=float(train.get("lambda_velocity", 1.0)),
         lambda_rollout=float(train.get("lambda_rollout", 1.0)),
+        regime=dataset.get("regime"),
+        models=tuple(document.get("models", ("constant_velocity", "linear", "mlp", "gru", "gnn"))),
+        relative_acceleration=float(train.get("relative_acceleration", 0.0)),
+        eval_stride=int(evaluation.get("stride", 1)),
+        ood_worlds=int(evaluation.get("ood_worlds", 4)),
+        ood_experiments=int(evaluation.get("ood_experiments", 2)),
+        rollout_comparison_model=str(document.get("rollout_comparison_model", "gnn")),
     )
 
 

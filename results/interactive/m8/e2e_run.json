@@ -1,0 +1,2269 @@
+{
+  "description": "State captured from the live backend immediately after the browser end-to-end run (landing -> BEGIN DISCOVERY -> convergence -> user challenge -> Break the theory -> evaluation).",
+  "captured_at": "2026-09-25T19:40:58-0400",
+  "summary": {
+    "status": "CONVERGED",
+    "experiments": 12,
+    "usable_experiments": 9,
+    "budget": 16,
+    "theory_state": "SUPPORTED",
+    "leader": {
+      "id": "H-0001",
+      "equation": "3.202*m1*m2/r**2.402",
+      "latex": "\\frac{3.202 m_{1} m_{2}}{r^{2.402}}",
+      "variables": [
+        "m1",
+        "m2",
+        "r"
+      ],
+      "parameters": [
+        {
+          "name": "c0",
+          "value": -2.4015760485081925,
+          "std": 0.001234322888852596,
+          "ci95": [
+            -2.4032645262580004,
+            -2.3989287943070465
+          ]
+        },
+        {
+          "name": "c1",
+          "value": 3.201543012304902,
+          "std": 0.003114502884574803,
+          "ci95": [
+            3.1940993969079177,
+            3.2060844485892095
+          ]
+        }
+      ],
+      "parameter_uncertainty_method": "experiment-level bootstrap (24 resamples)",
+      "fit_error": 0.0010968347999184096,
+      "fit_error_definition": "weighted NMSE on fitting evidence, weights 1/(|y| + median|y|)",
+      "complexity": 7,
+      "source": "family:power_law",
+      "supporting_experiments": [
+        "E-0006",
+        "E-0007",
+        "E-0008",
+        "E-0009",
+        "E-0010",
+        "C-6fe7303f",
+        "C-c6b3fca1"
+      ],
+      "contradicting_experiments": [],
+      "verdicts": [
+        {
+          "experiment_id": "E-0006",
+          "verdict": "supports",
+          "inside_95": 0.905940594059406,
+          "median_z": 0.602171974209504,
+          "log_density": 624.1527148858247,
+          "observations": 202,
+          "timestamp": 1790379541.42723
+        },
+        {
+          "experiment_id": "E-0007",
+          "verdict": "supports",
+          "inside_95": 0.9851485148514851,
+          "median_z": 0.4762561500291218,
+          "log_density": 216.01862484483894,
+          "observations": 202,
+          "timestamp": 1790379545.4864771
+        },
+        {
+          "experiment_id": "E-0008",
+          "verdict": "supports",
+          "inside_95": 0.9108910891089109,
+          "median_z": 0.8409408422384042,
+          "log_density": 569.4197781493401,
+          "observations": 202,
+          "timestamp": 1790379547.249117
+        },
+        {
+          "experiment_id": "E-0009",
+          "verdict": "supports",
+          "inside_95": 0.9702970297029703,
+          "median_z": 0.7019179971889301,
+          "log_density": 410.9527782190141,
+          "observations": 202,
+          "timestamp": 1790379548.895853
+        },
+        {
+          "experiment_id": "E-0010",
+          "verdict": "supports",
+          "inside_95": 0.9455445544554455,
+          "median_z": 0.7464110356786146,
+          "log_density": 655.3999330380054,
+          "observations": 202,
+          "timestamp": 1790379551.576292
+        },
+        {
+          "experiment_id": "C-6fe7303f",
+          "verdict": "supports",
+          "inside_95": 0.9405940594059405,
+          "median_z": 0.7208454934399451,
+          "log_density": 606.3880456488239,
+          "observations": 202,
+          "timestamp": 1790379594.1981251
+        },
+        {
+          "experiment_id": "C-c6b3fca1",
+          "verdict": "supports",
+          "inside_95": 0.9603960396039604,
+          "median_z": 0.7899578403674481,
+          "log_density": 568.048595490081,
+          "observations": 202,
+          "timestamp": 1790379617.2135081
+        }
+      ],
+      "created_at": 1790379540.276374,
+      "updated_at": 1790379617.275132,
+      "status": "SUPPORTED",
+      "score": 2.511598635272934,
+      "score_semantics": "Penalized mean log predictive density in nats per observation: mean log N(y | f(x), sigma(x)) over every tested observation, minus complexity_penalty * complexity. Higher is better. Comparative only; not a probability.",
+      "observations_tested": 1414,
+      "merged_from": [],
+      "parent": null,
+      "history": [
+        {
+          "time": 1790379540.276374,
+          "event": "created",
+          "source": "family:power_law",
+          "equation": "3.192*m1*m2/r**2.396"
+        },
+        {
+          "event": "refit",
+          "old": "3.192*m1*m2/r**2.396",
+          "new": "3.192*m1*m2/r**2.396",
+          "observations": 404
+        },
+        {
+          "time": 1790379541.42723,
+          "event": "tested",
+          "experiment_id": "E-0006",
+          "verdict": "supports",
+          "inside_95": 0.905940594059406,
+          "median_z": 0.602171974209504,
+          "log_density": 624.1527148858247,
+          "observations": 202,
+          "timestamp": 1790379541.42723
+        },
+        {
+          "event": "refit",
+          "old": "3.192*m1*m2/r**2.396",
+          "new": "3.194*m1*m2/r**2.399",
+          "observations": 606
+        },
+        {
+          "time": 1790379545.4864771,
+          "event": "tested",
+          "experiment_id": "E-0007",
+          "verdict": "supports",
+          "inside_95": 0.9851485148514851,
+          "median_z": 0.4762561500291218,
+          "log_density": 216.01862484483894,
+          "observations": 202,
+          "timestamp": 1790379545.4864771
+        },
+        {
+          "time": 1790379545.486542,
+          "event": "status",
+          "old": "PROPOSED",
+          "new": "SUPPORTED",
+          "reason": "2 supporting experiments, none contradicting"
+        },
+        {
+          "event": "refit",
+          "old": "3.194*m1*m2/r**2.399",
+          "new": "3.201*m1*m2/r**2.401",
+          "observations": 808
+        },
+        {
+          "time": 1790379547.249117,
+          "event": "tested",
+          "experiment_id": "E-0008",
+          "verdict": "supports",
+          "inside_95": 0.9108910891089109,
+          "median_z": 0.8409408422384042,
+          "log_density": 569.4197781493401,
+          "observations": 202,
+          "timestamp": 1790379547.249117
+        },
+        {
+          "event": "refit",
+          "old": "3.201*m1*m2/r**2.401",
+          "new": "3.202*m1*m2/r**2.402",
+          "observations": 1010
+        },
+        {
+          "time": 1790379548.895853,
+          "event": "tested",
+          "experiment_id": "E-0009",
+          "verdict": "supports",
+          "inside_95": 0.9702970297029703,
+          "median_z": 0.7019179971889301,
+          "log_density": 410.9527782190141,
+          "observations": 202,
+          "timestamp": 1790379548.895853
+        },
+        {
+          "event": "refit",
+          "old": "3.202*m1*m2/r**2.402",
+          "new": "3.201*m1*m2/r**2.401",
+          "observations": 1212
+        },
+        {
+          "time": 1790379551.576292,
+          "event": "tested",
+          "experiment_id": "E-0010",
+          "verdict": "supports",
+          "inside_95": 0.9455445544554455,
+          "median_z": 0.7464110356786146,
+          "log_density": 655.3999330380054,
+          "observations": 202,
+          "timestamp": 1790379551.576292
+        },
+        {
+          "event": "refit",
+          "old": "3.201*m1*m2/r**2.401",
+          "new": "3.201*m1*m2/r**2.401",
+          "observations": 1414
+        },
+        {
+          "time": 1790379594.1981251,
+          "event": "tested",
+          "experiment_id": "C-6fe7303f",
+          "verdict": "supports",
+          "inside_95": 0.9405940594059405,
+          "median_z": 0.7208454934399451,
+          "log_density": 606.3880456488239,
+          "observations": 202,
+          "timestamp": 1790379594.1981251
+        },
+        {
+          "event": "refit",
+          "old": "3.201*m1*m2/r**2.401",
+          "new": "3.201*m1*m2/r**2.401",
+          "observations": 1616
+        },
+        {
+          "time": 1790379617.2135081,
+          "event": "tested",
+          "experiment_id": "C-c6b3fca1",
+          "verdict": "supports",
+          "inside_95": 0.9603960396039604,
+          "median_z": 0.7899578403674481,
+          "log_density": 568.048595490081,
+          "observations": 202,
+          "timestamp": 1790379617.2135081
+        },
+        {
+          "event": "refit",
+          "old": "3.201*m1*m2/r**2.401",
+          "new": "3.202*m1*m2/r**2.402",
+          "observations": 1818
+        }
+      ]
+    },
+    "active_hypotheses": 2,
+    "counterexamples": 0,
+    "ledger": {
+      "experiments": 12,
+      "observations": 2424,
+      "steps": 1200,
+      "seconds": 0.6161041679999926
+    },
+    "criteria": [
+      "uncertainty",
+      "disagreement",
+      "extrapolation",
+      "weakly_observed"
+    ]
+  },
+  "theories": {
+    "status": "CONVERGED",
+    "leader": "H-0001",
+    "hypotheses": [
+      {
+        "id": "H-0001",
+        "equation": "3.202*m1*m2/r**2.402",
+        "latex": "\\frac{3.202 m_{1} m_{2}}{r^{2.402}}",
+        "variables": [
+          "m1",
+          "m2",
+          "r"
+        ],
+        "parameters": [
+          {
+            "name": "c0",
+            "value": -2.4015760485081925,
+            "std": 0.001234322888852596,
+            "ci95": [
+              -2.4032645262580004,
+              -2.3989287943070465
+            ]
+          },
+          {
+            "name": "c1",
+            "value": 3.201543012304902,
+            "std": 0.003114502884574803,
+            "ci95": [
+              3.1940993969079177,
+              3.2060844485892095
+            ]
+          }
+        ],
+        "parameter_uncertainty_method": "experiment-level bootstrap (24 resamples)",
+        "fit_error": 0.0010968347999184096,
+        "fit_error_definition": "weighted NMSE on fitting evidence, weights 1/(|y| + median|y|)",
+        "complexity": 7,
+        "source": "family:power_law",
+        "supporting_experiments": [
+          "E-0006",
+          "E-0007",
+          "E-0008",
+          "E-0009",
+          "E-0010",
+          "C-6fe7303f",
+          "C-c6b3fca1"
+        ],
+        "contradicting_experiments": [],
+        "verdicts": [
+          {
+            "experiment_id": "E-0006",
+            "verdict": "supports",
+            "inside_95": 0.905940594059406,
+            "median_z": 0.602171974209504,
+            "log_density": 624.1527148858247,
+            "observations": 202,
+            "timestamp": 1790379541.42723
+          },
+          {
+            "experiment_id": "E-0007",
+            "verdict": "supports",
+            "inside_95": 0.9851485148514851,
+            "median_z": 0.4762561500291218,
+            "log_density": 216.01862484483894,
+            "observations": 202,
+            "timestamp": 1790379545.4864771
+          },
+          {
+            "experiment_id": "E-0008",
+            "verdict": "supports",
+            "inside_95": 0.9108910891089109,
+            "median_z": 0.8409408422384042,
+            "log_density": 569.4197781493401,
+            "observations": 202,
+            "timestamp": 1790379547.249117
+          },
+          {
+            "experiment_id": "E-0009",
+            "verdict": "supports",
+            "inside_95": 0.9702970297029703,
+            "median_z": 0.7019179971889301,
+            "log_density": 410.9527782190141,
+            "observations": 202,
+            "timestamp": 1790379548.895853
+          },
+          {
+            "experiment_id": "E-0010",
+            "verdict": "supports",
+            "inside_95": 0.9455445544554455,
+            "median_z": 0.7464110356786146,
+            "log_density": 655.3999330380054,
+            "observations": 202,
+            "timestamp": 1790379551.576292
+          },
+          {
+            "experiment_id": "C-6fe7303f",
+            "verdict": "supports",
+            "inside_95": 0.9405940594059405,
+            "median_z": 0.7208454934399451,
+            "log_density": 606.3880456488239,
+            "observations": 202,
+            "timestamp": 1790379594.1981251
+          },
+          {
+            "experiment_id": "C-c6b3fca1",
+            "verdict": "supports",
+            "inside_95": 0.9603960396039604,
+            "median_z": 0.7899578403674481,
+            "log_density": 568.048595490081,
+            "observations": 202,
+            "timestamp": 1790379617.2135081
+          }
+        ],
+        "created_at": 1790379540.276374,
+        "updated_at": 1790379617.275132,
+        "status": "SUPPORTED",
+        "score": 2.511598635272934,
+        "score_semantics": "Penalized mean log predictive density in nats per observation: mean log N(y | f(x), sigma(x)) over every tested observation, minus complexity_penalty * complexity. Higher is better. Comparative only; not a probability.",
+        "observations_tested": 1414,
+        "merged_from": [],
+        "parent": null,
+        "history": [
+          {
+            "time": 1790379540.276374,
+            "event": "created",
+            "source": "family:power_law",
+            "equation": "3.192*m1*m2/r**2.396"
+          },
+          {
+            "event": "refit",
+            "old": "3.192*m1*m2/r**2.396",
+            "new": "3.192*m1*m2/r**2.396",
+            "observations": 404
+          },
+          {
+            "time": 1790379541.42723,
+            "event": "tested",
+            "experiment_id": "E-0006",
+            "verdict": "supports",
+            "inside_95": 0.905940594059406,
+            "median_z": 0.602171974209504,
+            "log_density": 624.1527148858247,
+            "observations": 202,
+            "timestamp": 1790379541.42723
+          },
+          {
+            "event": "refit",
+            "old": "3.192*m1*m2/r**2.396",
+            "new": "3.194*m1*m2/r**2.399",
+            "observations": 606
+          },
+          {
+            "time": 1790379545.4864771,
+            "event": "tested",
+            "experiment_id": "E-0007",
+            "verdict": "supports",
+            "inside_95": 0.9851485148514851,
+            "median_z": 0.4762561500291218,
+            "log_density": 216.01862484483894,
+            "observations": 202,
+            "timestamp": 1790379545.4864771
+          },
+          {
+            "time": 1790379545.486542,
+            "event": "status",
+            "old": "PROPOSED",
+            "new": "SUPPORTED",
+            "reason": "2 supporting experiments, none contradicting"
+          },
+          {
+            "event": "refit",
+            "old": "3.194*m1*m2/r**2.399",
+            "new": "3.201*m1*m2/r**2.401",
+            "observations": 808
+          },
+          {
+            "time": 1790379547.249117,
+            "event": "tested",
+            "experiment_id": "E-0008",
+            "verdict": "supports",
+            "inside_95": 0.9108910891089109,
+            "median_z": 0.8409408422384042,
+            "log_density": 569.4197781493401,
+            "observations": 202,
+            "timestamp": 1790379547.249117
+          },
+          {
+            "event": "refit",
+            "old": "3.201*m1*m2/r**2.401",
+            "new": "3.202*m1*m2/r**2.402",
+            "observations": 1010
+          },
+          {
+            "time": 1790379548.895853,
+            "event": "tested",
+            "experiment_id": "E-0009",
+            "verdict": "supports",
+            "inside_95": 0.9702970297029703,
+            "median_z": 0.7019179971889301,
+            "log_density": 410.9527782190141,
+            "observations": 202,
+            "timestamp": 1790379548.895853
+          },
+          {
+            "event": "refit",
+            "old": "3.202*m1*m2/r**2.402",
+            "new": "3.201*m1*m2/r**2.401",
+            "observations": 1212
+          },
+          {
+            "time": 1790379551.576292,
+            "event": "tested",
+            "experiment_id": "E-0010",
+            "verdict": "supports",
+            "inside_95": 0.9455445544554455,
+            "median_z": 0.7464110356786146,
+            "log_density": 655.3999330380054,
+            "observations": 202,
+            "timestamp": 1790379551.576292
+          },
+          {
+            "event": "refit",
+            "old": "3.201*m1*m2/r**2.401",
+            "new": "3.201*m1*m2/r**2.401",
+            "observations": 1414
+          },
+          {
+            "time": 1790379594.1981251,
+            "event": "tested",
+            "experiment_id": "C-6fe7303f",
+            "verdict": "supports",
+            "inside_95": 0.9405940594059405,
+            "median_z": 0.7208454934399451,
+            "log_density": 606.3880456488239,
+            "observations": 202,
+            "timestamp": 1790379594.1981251
+          },
+          {
+            "event": "refit",
+            "old": "3.201*m1*m2/r**2.401",
+            "new": "3.201*m1*m2/r**2.401",
+            "observations": 1616
+          },
+          {
+            "time": 1790379617.2135081,
+            "event": "tested",
+            "experiment_id": "C-c6b3fca1",
+            "verdict": "supports",
+            "inside_95": 0.9603960396039604,
+            "median_z": 0.7899578403674481,
+            "log_density": 568.048595490081,
+            "observations": 202,
+            "timestamp": 1790379617.2135081
+          },
+          {
+            "event": "refit",
+            "old": "3.201*m1*m2/r**2.401",
+            "new": "3.202*m1*m2/r**2.402",
+            "observations": 1818
+          }
+        ]
+      },
+      {
+        "id": "H-0002",
+        "equation": "3.2*m1*m2*exp(0.0004025*r)/r**2.402",
+        "latex": "\\frac{3.2 m_{1} m_{2} e^{0.0004025 r}}{r^{2.402}}",
+        "variables": [
+          "m1",
+          "m2",
+          "r"
+        ],
+        "parameters": [
+          {
+            "name": "c0",
+            "value": 0.0004025360410050181,
+            "std": 0.0035952731782310163,
+            "ci95": [
+              -0.00662295642712403,
+              0.007137191801855883
+            ]
+          },
+          {
+            "name": "c1",
+            "value": -2.402211059482166,
+            "std": 0.0067702861950996365,
+            "ci95": [
+              -2.4139812255156183,
+              -2.3879222586018436
+            ]
+          },
+          {
+            "name": "c2",
+            "value": 3.200255031320851,
+            "std": 0.00873982319084444,
+            "ci95": [
+              3.1834846887962445,
+              3.2163036445767528
+            ]
+          }
+        ],
+        "parameter_uncertainty_method": "experiment-level bootstrap (24 resamples)",
+        "fit_error": 0.0010968260255641744,
+        "fit_error_definition": "weighted NMSE on fitting evidence, weights 1/(|y| + median|y|)",
+        "complexity": 11,
+        "source": "family:yukawa",
+        "supporting_experiments": [
+          "E-0006",
+          "E-0007",
+          "E-0008",
+          "E-0009",
+          "E-0010",
+          "C-6fe7303f",
+          "C-c6b3fca1"
+        ],
+        "contradicting_experiments": [],
+        "verdicts": [
+          {
+            "experiment_id": "E-0006",
+            "verdict": "supports",
+            "inside_95": 0.9356435643564357,
+            "median_z": 0.6935971507703842,
+            "log_density": 623.416525773871,
+            "observations": 202,
+            "timestamp": 1790379541.4463758
+          },
+          {
+            "experiment_id": "E-0007",
+            "verdict": "supports",
+            "inside_95": 1.0,
+            "median_z": 0.06715496665947776,
+            "log_density": -127.9287080906845,
+            "observations": 202,
+            "timestamp": 1790379545.487743
+          },
+          {
+            "experiment_id": "E-0008",
+            "verdict": "supports",
+            "inside_95": 0.9108910891089109,
+            "median_z": 0.7951593478655684,
+            "log_density": 570.7583547869024,
+            "observations": 202,
+            "timestamp": 1790379547.2502038
+          },
+          {
+            "experiment_id": "E-0009",
+            "verdict": "supports",
+            "inside_95": 0.9752475247524752,
+            "median_z": 0.6190571342851532,
+            "log_density": 405.25718081617924,
+            "observations": 202,
+            "timestamp": 1790379548.899762
+          },
+          {
+            "experiment_id": "E-0010",
+            "verdict": "supports",
+            "inside_95": 0.9603960396039604,
+            "median_z": 0.7349807197044229,
+            "log_density": 655.6593495387178,
+            "observations": 202,
+            "timestamp": 1790379551.577357
+          },
+          {
+            "experiment_id": "C-6fe7303f",
+            "verdict": "supports",
+            "inside_95": 0.9405940594059405,
+            "median_z": 0.7207402905451779,
+            "log_density": 606.3804167004646,
+            "observations": 202,
+            "timestamp": 1790379594.20158
+          },
+          {
+            "experiment_id": "C-c6b3fca1",
+            "verdict": "supports",
+            "inside_95": 0.9653465346534653,
+            "median_z": 0.7619754230997612,
+            "log_density": 567.7257836492104,
+            "observations": 202,
+            "timestamp": 1790379617.2150211
+          }
+        ],
+        "created_at": 1790379540.2818,
+        "updated_at": 1790379617.3760269,
+        "status": "SUPPORTED",
+        "score": 2.2247021946072567,
+        "score_semantics": "Penalized mean log predictive density in nats per observation: mean log N(y | f(x), sigma(x)) over every tested observation, minus complexity_penalty * complexity. Higher is better. Comparative only; not a probability.",
+        "observations_tested": 1414,
+        "merged_from": [],
+        "parent": null,
+        "history": [
+          {
+            "time": 1790379540.2818,
+            "event": "created",
+            "source": "family:yukawa",
+            "equation": "3.246*m1*m2*exp(-0.01602*r)/r**2.375"
+          },
+          {
+            "event": "refit",
+            "old": "3.246*m1*m2*exp(-0.01602*r)/r**2.375",
+            "new": "3.246*m1*m2*exp(-0.01602*r)/r**2.375",
+            "observations": 404
+          },
+          {
+            "time": 1790379541.4463758,
+            "event": "tested",
+            "experiment_id": "E-0006",
+            "verdict": "supports",
+            "inside_95": 0.9356435643564357,
+            "median_z": 0.6935971507703842,
+            "log_density": 623.416525773871,
+            "observations": 202,
+            "timestamp": 1790379541.4463758
+          },
+          {
+            "event": "refit",
+            "old": "3.246*m1*m2*exp(-0.01602*r)/r**2.375",
+            "new": "3.223*m1*m2*exp(-0.009382*r)/r**2.383",
+            "observations": 606
+          },
+          {
+            "time": 1790379545.487743,
+            "event": "tested",
+            "experiment_id": "E-0007",
+            "verdict": "supports",
+            "inside_95": 1.0,
+            "median_z": 0.06715496665947776,
+            "log_density": -127.9287080906845,
+            "observations": 202,
+            "timestamp": 1790379545.487743
+          },
+          {
+            "time": 1790379545.487782,
+            "event": "status",
+            "old": "PROPOSED",
+            "new": "SUPPORTED",
+            "reason": "2 supporting experiments, none contradicting"
+          },
+          {
+            "event": "refit",
+            "old": "3.223*m1*m2*exp(-0.009382*r)/r**2.383",
+            "new": "3.193*m1*m2*exp(0.002441*r)/r**2.404",
+            "observations": 808
+          },
+          {
+            "time": 1790379547.2502038,
+            "event": "tested",
+            "experiment_id": "E-0008",
+            "verdict": "supports",
+            "inside_95": 0.9108910891089109,
+            "median_z": 0.7951593478655684,
+            "log_density": 570.7583547869024,
+            "observations": 202,
+            "timestamp": 1790379547.2502038
+          },
+          {
+            "event": "refit",
+            "old": "3.193*m1*m2*exp(0.002441*r)/r**2.404",
+            "new": "3.204*m1*m2*exp(-0.0006988*r)/r**2.401",
+            "observations": 1010
+          },
+          {
+            "time": 1790379548.899762,
+            "event": "tested",
+            "experiment_id": "E-0009",
+            "verdict": "supports",
+            "inside_95": 0.9752475247524752,
+            "median_z": 0.6190571342851532,
+            "log_density": 405.25718081617924,
+            "observations": 202,
+            "timestamp": 1790379548.899762
+          },
+          {
+            "event": "refit",
+            "old": "3.204*m1*m2*exp(-0.0006988*r)/r**2.401",
+            "new": "3.201*m1*m2*exp(0.0002933*r)/r**2.402",
+            "observations": 1212
+          },
+          {
+            "time": 1790379551.577357,
+            "event": "tested",
+            "experiment_id": "E-0010",
+            "verdict": "supports",
+            "inside_95": 0.9603960396039604,
+            "median_z": 0.7349807197044229,
+            "log_density": 655.6593495387178,
+            "observations": 202,
+            "timestamp": 1790379551.577357
+          },
+          {
+            "event": "refit",
+            "old": "3.201*m1*m2*exp(0.0002933*r)/r**2.402",
+            "new": "3.201*m1*m2*exp(0.0002604*r)/r**2.402",
+            "observations": 1414
+          },
+          {
+            "time": 1790379594.20158,
+            "event": "tested",
+            "experiment_id": "C-6fe7303f",
+            "verdict": "supports",
+            "inside_95": 0.9405940594059405,
+            "median_z": 0.7207402905451779,
+            "log_density": 606.3804167004646,
+            "observations": 202,
+            "timestamp": 1790379594.20158
+          },
+          {
+            "event": "refit",
+            "old": "3.201*m1*m2*exp(0.0002604*r)/r**2.402",
+            "new": "3.202*m1*m2*exp(-1.438e-5*r)/r**2.401",
+            "observations": 1616
+          },
+          {
+            "time": 1790379617.2150211,
+            "event": "tested",
+            "experiment_id": "C-c6b3fca1",
+            "verdict": "supports",
+            "inside_95": 0.9653465346534653,
+            "median_z": 0.7619754230997612,
+            "log_density": 567.7257836492104,
+            "observations": 202,
+            "timestamp": 1790379617.2150211
+          },
+          {
+            "event": "refit",
+            "old": "3.202*m1*m2*exp(-1.438e-5*r)/r**2.401",
+            "new": "3.2*m1*m2*exp(0.0004025*r)/r**2.402",
+            "observations": 1818
+          }
+        ]
+      },
+      {
+        "id": "H-0003",
+        "equation": "17.23*m1*m2*exp(-1.691*r)",
+        "latex": "17.23 m_{1} m_{2} e^{- 1.691 r}",
+        "variables": [
+          "m1",
+          "m2",
+          "r"
+        ],
+        "parameters": [
+          {
+            "name": "c0",
+            "value": -1.6912294472453908,
+            "std": 0.1349988862924075,
+            "ci95": [
+              -1.8006635952489618,
+              -1.4578248110739351
+            ]
+          },
+          {
+            "name": "c1",
+            "value": 17.2309787892207,
+            "std": 3.267101815117675,
+            "ci95": [
+              11.770168671563564,
+              20.29514987027291
+            ]
+          }
+        ],
+        "parameter_uncertainty_method": "experiment-level bootstrap (24 resamples)",
+        "fit_error": 0.02785475702875882,
+        "fit_error_definition": "weighted NMSE on fitting evidence, weights 1/(|y| + median|y|)",
+        "complexity": 8,
+        "source": "family:exponential_screening",
+        "supporting_experiments": [],
+        "contradicting_experiments": [
+          "E-0006"
+        ],
+        "verdicts": [
+          {
+            "experiment_id": "E-0006",
+            "verdict": "contradicts",
+            "inside_95": 0.0,
+            "median_z": 2.347396718411843,
+            "log_density": -258.85969123188397,
+            "observations": 202,
+            "timestamp": 1790379541.456713
+          }
+        ],
+        "created_at": 1790379540.286453,
+        "updated_at": 1790379541.4573581,
+        "status": "CONTRADICTED",
+        "score": -1.3614836199598217,
+        "score_semantics": "Penalized mean log predictive density in nats per observation: mean log N(y | f(x), sigma(x)) over every tested observation, minus complexity_penalty * complexity. Higher is better. Comparative only; not a probability.",
+        "observations_tested": 202,
+        "merged_from": [],
+        "parent": null,
+        "history": [
+          {
+            "time": 1790379540.286453,
+            "event": "created",
+            "source": "family:exponential_screening",
+            "equation": "17.23*m1*m2*exp(-1.691*r)"
+          },
+          {
+            "event": "refit",
+            "old": "17.23*m1*m2*exp(-1.691*r)",
+            "new": "17.23*m1*m2*exp(-1.691*r)",
+            "observations": 404
+          },
+          {
+            "time": 1790379541.456713,
+            "event": "tested",
+            "experiment_id": "E-0006",
+            "verdict": "contradicts",
+            "inside_95": 0.0,
+            "median_z": 2.347396718411843,
+            "log_density": -258.85969123188397,
+            "observations": 202,
+            "timestamp": 1790379541.456713
+          },
+          {
+            "time": 1790379541.4573581,
+            "event": "status",
+            "old": "PROPOSED",
+            "new": "CONTRADICTED",
+            "reason": "1 contradicting experiment(s); latest E-0006 had 0% inside the 95% interval"
+          }
+        ]
+      }
+    ],
+    "counterexamples": [],
+    "ledger": {
+      "experiments": 12,
+      "observations": 2424,
+      "steps": 1200,
+      "seconds": 0.6161041679999926
+    },
+    "theory_state": "SUPPORTED"
+  },
+  "experiments": [
+    {
+      "id": "E-0001",
+      "source": "survey (random design)",
+      "design": {
+        "masses": [
+          1.786106414881354,
+          0.5503783629581965
+        ],
+        "positions": [
+          [
+            -0.097529260146756,
+            0.10247408671156816,
+            -0.4967775188477729
+          ],
+          [
+            0.097529260146756,
+            -0.10247408671156816,
+            0.4967775188477729
+          ]
+        ],
+        "velocities": [
+          [
+            -0.09397535596965255,
+            0.06343656311999858,
+            0.22876773354128396
+          ],
+          [
+            -0.00042788435417415415,
+            -0.0007694002251794996,
+            -0.00037896267986385233
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "survey"
+      },
+      "accepted": false,
+      "reason": "acceleration above instrument range",
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.786106414881354,
+        0.5503783629581965
+      ]
+    },
+    {
+      "id": "E-0002",
+      "source": "survey (random design)",
+      "design": {
+        "masses": [
+          1.9958149036838164,
+          1.9712530081643451
+        ],
+        "positions": [
+          [
+            0.8402542803500075,
+            0.49384812012987045,
+            0.3670534727807537
+          ],
+          [
+            -0.8402542803500075,
+            -0.49384812012987045,
+            -0.3670534727807537
+          ]
+        ],
+        "velocities": [
+          [
+            0.015871175570786215,
+            0.04019602837792868,
+            -0.0049558913206148416
+          ],
+          [
+            -0.07597693800737178,
+            0.04014863598417211,
+            0.10319219428363291
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "survey"
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.9958149036838164,
+        1.9712530081643451
+      ]
+    },
+    {
+      "id": "E-0003",
+      "source": "survey (random design)",
+      "design": {
+        "masses": [
+          1.3572947460946414,
+          0.9828040866139132
+        ],
+        "positions": [
+          [
+            0.36001253699667846,
+            -0.1731888405448254,
+            0.7940893505928611
+          ],
+          [
+            -0.36001253699667846,
+            0.1731888405448254,
+            -0.7940893505928611
+          ]
+        ],
+        "velocities": [
+          [
+            -0.028659051599232616,
+            0.09734727934420012,
+            0.03863668698440978
+          ],
+          [
+            -0.07956776032634864,
+            -0.015773348538339678,
+            0.09540599998992136
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "survey"
+      },
+      "accepted": false,
+      "reason": "acceleration above instrument range",
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.3572947460946414,
+        0.9828040866139132
+      ]
+    },
+    {
+      "id": "E-0004",
+      "source": "survey (random design)",
+      "design": {
+        "masses": [
+          1.0041755908184906,
+          0.7254192003422586
+        ],
+        "positions": [
+          [
+            -1.1853642858882547,
+            -0.6881310217738379,
+            -0.23291625202090618
+          ],
+          [
+            1.1853642858882547,
+            0.6881310217738379,
+            0.23291625202090618
+          ]
+        ],
+        "velocities": [
+          [
+            0.13997787483513185,
+            0.18819540515633842,
+            0.17296669598743517
+          ],
+          [
+            0.005813866116166757,
+            -0.019656932904646963,
+            -7.245985748351496e-05
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "survey"
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.0041755908184906,
+        0.7254192003422586
+      ]
+    },
+    {
+      "id": "E-0005",
+      "source": "survey (random design)",
+      "design": {
+        "masses": [
+          1.047665252367243,
+          0.6582429193553443
+        ],
+        "positions": [
+          [
+            -0.1648751810882543,
+            -0.2669687427452992,
+            0.4541710931873067
+          ],
+          [
+            0.1648751810882543,
+            0.2669687427452992,
+            -0.4541710931873067
+          ]
+        ],
+        "velocities": [
+          [
+            -0.04140259343600815,
+            -0.11097369679743763,
+            0.16500578613633188
+          ],
+          [
+            0.06623075296810857,
+            -0.05205785838564855,
+            0.31879721310362036
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "survey"
+      },
+      "accepted": false,
+      "reason": "acceleration above instrument range",
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.047665252367243,
+        0.6582429193553443
+      ]
+    },
+    {
+      "id": "E-0006",
+      "source": "survey (random design)",
+      "design": {
+        "masses": [
+          1.1219837740335061,
+          1.601725357683094
+        ],
+        "positions": [
+          [
+            -0.062249822280694755,
+            -0.8179931370358958,
+            -1.201185119672925
+          ],
+          [
+            0.062249822280694755,
+            0.8179931370358958,
+            1.201185119672925
+          ]
+        ],
+        "velocities": [
+          [
+            0.12508446654908964,
+            -0.09065004029244755,
+            -0.04541512823766093
+          ],
+          [
+            0.006705905412308912,
+            0.2737327687881076,
+            0.02577111049931738
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "survey"
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.1219837740335061,
+        1.601725357683094
+      ]
+    },
+    {
+      "id": "E-0007",
+      "source": "active (standardized disagreement 0.958)",
+      "design": {
+        "masses": [
+          1.9445287101864008,
+          1.7013755549129135
+        ],
+        "positions": [
+          [
+            0.28584783865855884,
+            -0.7777480953965579,
+            -0.5730570941423431
+          ],
+          [
+            -0.28584783865855884,
+            0.7777480953965579,
+            0.5730570941423431
+          ]
+        ],
+        "velocities": [
+          [
+            -0.024837312841627206,
+            -0.052849882213665614,
+            -0.036816393550595156
+          ],
+          [
+            0.032708768228298414,
+            0.043199953148684175,
+            -0.0341139617203296
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": ""
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.9445287101864008,
+        1.7013755549129135
+      ]
+    },
+    {
+      "id": "E-0008",
+      "source": "active (standardized disagreement 0.976)",
+      "design": {
+        "masses": [
+          1.3556469839172,
+          1.4795798275524321
+        ],
+        "positions": [
+          [
+            0.820464199128682,
+            -0.5936504130221607,
+            1.1001541651416518
+          ],
+          [
+            -0.820464199128682,
+            0.5936504130221607,
+            -1.1001541651416518
+          ]
+        ],
+        "velocities": [
+          [
+            -0.12094614071771417,
+            -0.17327661091503557,
+            -0.11540138550157643
+          ],
+          [
+            -0.048336967751261097,
+            -0.10226559177770198,
+            -0.01708502048979898
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": ""
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.3556469839172,
+        1.4795798275524321
+      ]
+    },
+    {
+      "id": "E-0009",
+      "source": "active (standardized disagreement 1.34)",
+      "design": {
+        "masses": [
+          0.9368910872365815,
+          0.9012754586079192
+        ],
+        "positions": [
+          [
+            0.3443027438125051,
+            0.7551089254950869,
+            0.3025215489158776
+          ],
+          [
+            -0.3443027438125051,
+            -0.7551089254950869,
+            -0.3025215489158776
+          ]
+        ],
+        "velocities": [
+          [
+            -0.28281112884958104,
+            -0.042150509033893835,
+            0.04665996988119171
+          ],
+          [
+            0.24160575681885563,
+            0.08022508629947443,
+            -0.15395686874498063
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": ""
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        0.9368910872365815,
+        0.9012754586079192
+      ]
+    },
+    {
+      "id": "E-0010",
+      "source": "active (standardized disagreement 0.413)",
+      "design": {
+        "masses": [
+          1.7065837897578073,
+          0.7812744723083478
+        ],
+        "positions": [
+          [
+            0.2757712654303547,
+            1.4636737919142904,
+            0.02800304578862981
+          ],
+          [
+            -0.2757712654303547,
+            -1.4636737919142904,
+            -0.02800304578862981
+          ]
+        ],
+        "velocities": [
+          [
+            0.1965243063453292,
+            -0.055648255322266325,
+            0.08884174401749484
+          ],
+          [
+            0.01831997628176481,
+            0.0817869111860042,
+            0.054986493050908504
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": ""
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.7065837897578073,
+        0.7812744723083478
+      ]
+    },
+    {
+      "id": "E-0011",
+      "source": "challenge C-1b1d34a1 (user)",
+      "design": {
+        "masses": [
+          1.2,
+          0.9
+        ],
+        "positions": [
+          [
+            -1.2,
+            0.0,
+            0.1
+          ],
+          [
+            1.2,
+            0.1,
+            -0.1
+          ]
+        ],
+        "velocities": [
+          [
+            0.0,
+            0.2,
+            0.0
+          ],
+          [
+            0.0,
+            -0.25,
+            0.05
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "user"
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        1.2,
+        0.9
+      ]
+    },
+    {
+      "id": "E-0012",
+      "source": "challenge C-85fc4873 (extrapolation)",
+      "design": {
+        "masses": [
+          0.5041207214039962,
+          1.0487652937707757
+        ],
+        "positions": [
+          [
+            0.17821632869473775,
+            -0.8814551899362124,
+            -0.00012352664616885968
+          ],
+          [
+            -0.17821632869473775,
+            0.8814551899362124,
+            0.00012352664616885968
+          ]
+        ],
+        "velocities": [
+          [
+            0.012436182472432488,
+            -0.003928748684372939,
+            0.018767969915330848
+          ],
+          [
+            -0.3110311414432453,
+            -0.14093349600686744,
+            -0.04414135663503134
+          ]
+        ],
+        "duration": 1.0,
+        "dt": 0.01,
+        "label": "candidate-22"
+      },
+      "accepted": true,
+      "reason": null,
+      "dt": 0.01,
+      "frame_stride": 2,
+      "masses": [
+        0.5041207214039962,
+        1.0487652937707757
+      ]
+    }
+  ],
+  "notebook": [
+    {
+      "index": 0,
+      "kind": "experiment",
+      "timestamp": 1790379537.309182,
+      "payload": {
+        "experiment_id": "E-0001",
+        "summary": "survey (random design); rejected: acceleration above instrument range"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0001: survey (random design); rejected: acceleration above instrument range."
+    },
+    {
+      "index": 1,
+      "kind": "experiment",
+      "timestamp": 1790379537.393267,
+      "payload": {
+        "experiment_id": "E-0002",
+        "summary": "survey (random design); usable"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0002: survey (random design); usable."
+    },
+    {
+      "index": 2,
+      "kind": "experiment",
+      "timestamp": 1790379537.4688709,
+      "payload": {
+        "experiment_id": "E-0003",
+        "summary": "survey (random design); rejected: acceleration above instrument range"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0003: survey (random design); rejected: acceleration above instrument range."
+    },
+    {
+      "index": 3,
+      "kind": "experiment",
+      "timestamp": 1790379537.585124,
+      "payload": {
+        "experiment_id": "E-0004",
+        "summary": "survey (random design); usable"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0004: survey (random design); usable."
+    },
+    {
+      "index": 4,
+      "kind": "hypothesis_created",
+      "timestamp": 1790379540.277515,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "equation": "3.192*m1*m2/r**2.396",
+        "fit_error": 0.0006052849948726788,
+        "complexity": 7,
+        "source": "family:power_law",
+        "parameters": [
+          {
+            "name": "c0",
+            "value": -2.3959625039390544,
+            "std": 0.004019113676922994,
+            "ci95": [
+              -2.401099791709676,
+              -2.389593693448057
+            ]
+          },
+          {
+            "name": "c1",
+            "value": 3.1916566788805865,
+            "std": 0.0060812583472442125,
+            "ci95": [
+              3.1811662294228458,
+              3.1994380964060145
+            ]
+          }
+        ]
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Proposed H-0001: F = 3.192*m1*m2/r**2.396 (weighted NMSE 0.000605, complexity 7)."
+    },
+    {
+      "index": 5,
+      "kind": "hypothesis_created",
+      "timestamp": 1790379540.284606,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "equation": "3.246*m1*m2*exp(-0.01602*r)/r**2.375",
+        "fit_error": 0.0006022086471852839,
+        "complexity": 11,
+        "source": "family:yukawa",
+        "parameters": [
+          {
+            "name": "c0",
+            "value": -0.01602231049528394,
+            "std": 0.014178174100589459,
+            "ci95": [
+              -0.0450214075482547,
+              -0.0035174782825827325
+            ]
+          },
+          {
+            "name": "c1",
+            "value": -2.3746422726739436,
+            "std": 0.02099282223342722,
+            "ci95": [
+              -2.395568022900155,
+              -2.3325341903120616
+            ]
+          },
+          {
+            "name": "c2",
+            "value": 3.2459397258471006,
+            "std": 0.046599178029471035,
+            "ci95": [
+              3.2067115943520332,
+              3.343948572316904
+            ]
+          }
+        ]
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Proposed H-0002: F = 3.246*m1*m2*exp(-0.01602*r)/r**2.375 (weighted NMSE 0.000602, complexity 11)."
+    },
+    {
+      "index": 6,
+      "kind": "hypothesis_created",
+      "timestamp": 1790379540.289325,
+      "payload": {
+        "hypothesis_id": "H-0003",
+        "equation": "17.23*m1*m2*exp(-1.691*r)",
+        "fit_error": 0.027854757029386504,
+        "complexity": 8,
+        "source": "family:exponential_screening",
+        "parameters": [
+          {
+            "name": "c0",
+            "value": -1.6912278868148676,
+            "std": 0.13085964492145918,
+            "ci95": [
+              -1.7886631301678635,
+              -1.4779408583212585
+            ]
+          },
+          {
+            "name": "c1",
+            "value": 17.23093582950106,
+            "std": 3.1922688784510305,
+            "ci95": [
+              12.307939488304855,
+              19.873620504099613
+            ]
+          }
+        ]
+      },
+      "hypotheses": [
+        "H-0003"
+      ],
+      "text": "Proposed H-0003: F = 17.23*m1*m2*exp(-1.691*r) (weighted NMSE 0.0279, complexity 8)."
+    },
+    {
+      "index": 7,
+      "kind": "note",
+      "timestamp": 1790379540.325652,
+      "payload": {
+        "text": "Refit H-0001 on 404 observations: 3.192*m1*m2/r**2.396 -> 3.192*m1*m2/r**2.396"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 404 observations: 3.192*m1*m2/r**2.396 -> 3.192*m1*m2/r**2.396"
+    },
+    {
+      "index": 8,
+      "kind": "note",
+      "timestamp": 1790379540.371715,
+      "payload": {
+        "text": "Refit H-0002 on 404 observations: 3.246*m1*m2*exp(-0.01602*r)/r**2.375 -> 3.246*m1*m2*exp(-0.01602*r)/r**2.375"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 404 observations: 3.246*m1*m2*exp(-0.01602*r)/r**2.375 -> 3.246*m1*m2*exp(-0.01602*r)/r**2.375"
+    },
+    {
+      "index": 9,
+      "kind": "note",
+      "timestamp": 1790379540.42909,
+      "payload": {
+        "text": "Refit H-0003 on 404 observations: 17.23*m1*m2*exp(-1.691*r) -> 17.23*m1*m2*exp(-1.691*r)"
+      },
+      "hypotheses": [
+        "H-0003"
+      ],
+      "text": "Refit H-0003 on 404 observations: 17.23*m1*m2*exp(-1.691*r) -> 17.23*m1*m2*exp(-1.691*r)"
+    },
+    {
+      "index": 10,
+      "kind": "experiment",
+      "timestamp": 1790379540.994695,
+      "payload": {
+        "experiment_id": "E-0005",
+        "summary": "survey (random design); rejected: acceleration above instrument range"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0005: survey (random design); rejected: acceleration above instrument range."
+    },
+    {
+      "index": 11,
+      "kind": "experiment",
+      "timestamp": 1790379541.413538,
+      "payload": {
+        "experiment_id": "E-0006",
+        "summary": "survey (random design); usable"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0006: survey (random design); usable."
+    },
+    {
+      "index": 12,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379541.427244,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "experiment_id": "E-0006",
+        "verdict": "supports",
+        "inside": 0.905940594059406,
+        "median_z": 0.602171974209504,
+        "log_density": 624.1527148858247,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Tested H-0001 on E-0006: supports; 91% of observations inside its 95% interval (median |z| 0.60)."
+    },
+    {
+      "index": 13,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379541.4463968,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "experiment_id": "E-0006",
+        "verdict": "supports",
+        "inside": 0.9356435643564357,
+        "median_z": 0.6935971507703842,
+        "log_density": 623.416525773871,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Tested H-0002 on E-0006: supports; 94% of observations inside its 95% interval (median |z| 0.69)."
+    },
+    {
+      "index": 14,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379541.456724,
+      "payload": {
+        "hypothesis_id": "H-0003",
+        "experiment_id": "E-0006",
+        "verdict": "contradicts",
+        "inside": 0.0,
+        "median_z": 2.347396718411843,
+        "log_density": -258.85969123188397,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0003"
+      ],
+      "text": "Tested H-0003 on E-0006: contradicts; 0% of observations inside its 95% interval (median |z| 2.35)."
+    },
+    {
+      "index": 15,
+      "kind": "status_changed",
+      "timestamp": 1790379541.457365,
+      "payload": {
+        "hypothesis_id": "H-0003",
+        "old": "PROPOSED",
+        "new": "CONTRADICTED",
+        "reason": "1 contradicting experiment(s); latest E-0006 had 0% inside the 95% interval"
+      },
+      "hypotheses": [
+        "H-0003"
+      ],
+      "text": "H-0003 status PROPOSED -> CONTRADICTED: 1 contradicting experiment(s); latest E-0006 had 0% inside the 95% interval."
+    },
+    {
+      "index": 16,
+      "kind": "note",
+      "timestamp": 1790379544.480062,
+      "payload": {
+        "text": "Refit H-0001 on 606 observations: 3.192*m1*m2/r**2.396 -> 3.194*m1*m2/r**2.399"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 606 observations: 3.192*m1*m2/r**2.396 -> 3.194*m1*m2/r**2.399"
+    },
+    {
+      "index": 17,
+      "kind": "note",
+      "timestamp": 1790379544.661083,
+      "payload": {
+        "text": "Refit H-0002 on 606 observations: 3.246*m1*m2*exp(-0.01602*r)/r**2.375 -> 3.223*m1*m2*exp(-0.009382*r)/r**2.383"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 606 observations: 3.246*m1*m2*exp(-0.01602*r)/r**2.375 -> 3.223*m1*m2*exp(-0.009382*r)/r**2.383"
+    },
+    {
+      "index": 18,
+      "kind": "experiment",
+      "timestamp": 1790379545.485157,
+      "payload": {
+        "experiment_id": "E-0007",
+        "summary": "active (standardized disagreement 0.958); usable"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0007: active (standardized disagreement 0.958); usable."
+    },
+    {
+      "index": 19,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379545.486491,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "experiment_id": "E-0007",
+        "verdict": "supports",
+        "inside": 0.9851485148514851,
+        "median_z": 0.4762561500291218,
+        "log_density": 216.01862484483894,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Tested H-0001 on E-0007: supports; 99% of observations inside its 95% interval (median |z| 0.48)."
+    },
+    {
+      "index": 20,
+      "kind": "status_changed",
+      "timestamp": 1790379545.486549,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "old": "PROPOSED",
+        "new": "SUPPORTED",
+        "reason": "2 supporting experiments, none contradicting"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "H-0001 status PROPOSED -> SUPPORTED: 2 supporting experiments, none contradicting."
+    },
+    {
+      "index": 21,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379545.487751,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "experiment_id": "E-0007",
+        "verdict": "supports",
+        "inside": 1.0,
+        "median_z": 0.06715496665947776,
+        "log_density": -127.9287080906845,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Tested H-0002 on E-0007: supports; 100% of observations inside its 95% interval (median |z| 0.07)."
+    },
+    {
+      "index": 22,
+      "kind": "status_changed",
+      "timestamp": 1790379545.4877849,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "old": "PROPOSED",
+        "new": "SUPPORTED",
+        "reason": "2 supporting experiments, none contradicting"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "H-0002 status PROPOSED -> SUPPORTED: 2 supporting experiments, none contradicting."
+    },
+    {
+      "index": 23,
+      "kind": "note",
+      "timestamp": 1790379546.454908,
+      "payload": {
+        "text": "Refit H-0001 on 808 observations: 3.194*m1*m2/r**2.399 -> 3.201*m1*m2/r**2.401"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 808 observations: 3.194*m1*m2/r**2.399 -> 3.201*m1*m2/r**2.401"
+    },
+    {
+      "index": 24,
+      "kind": "note",
+      "timestamp": 1790379546.51591,
+      "payload": {
+        "text": "Refit H-0002 on 808 observations: 3.223*m1*m2*exp(-0.009382*r)/r**2.383 -> 3.193*m1*m2*exp(0.002441*r)/r**2.404"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 808 observations: 3.223*m1*m2*exp(-0.009382*r)/r**2.383 -> 3.193*m1*m2*exp(0.002441*r)/r**2.404"
+    },
+    {
+      "index": 25,
+      "kind": "experiment",
+      "timestamp": 1790379547.2477329,
+      "payload": {
+        "experiment_id": "E-0008",
+        "summary": "active (standardized disagreement 0.976); usable"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0008: active (standardized disagreement 0.976); usable."
+    },
+    {
+      "index": 26,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379547.24913,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "experiment_id": "E-0008",
+        "verdict": "supports",
+        "inside": 0.9108910891089109,
+        "median_z": 0.8409408422384042,
+        "log_density": 569.4197781493401,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Tested H-0001 on E-0008: supports; 91% of observations inside its 95% interval (median |z| 0.84)."
+    },
+    {
+      "index": 27,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379547.250209,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "experiment_id": "E-0008",
+        "verdict": "supports",
+        "inside": 0.9108910891089109,
+        "median_z": 0.7951593478655684,
+        "log_density": 570.7583547869024,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Tested H-0002 on E-0008: supports; 91% of observations inside its 95% interval (median |z| 0.80)."
+    },
+    {
+      "index": 28,
+      "kind": "note",
+      "timestamp": 1790379548.1686568,
+      "payload": {
+        "text": "Refit H-0001 on 1010 observations: 3.201*m1*m2/r**2.401 -> 3.202*m1*m2/r**2.402"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 1010 observations: 3.201*m1*m2/r**2.401 -> 3.202*m1*m2/r**2.402"
+    },
+    {
+      "index": 29,
+      "kind": "note",
+      "timestamp": 1790379548.221778,
+      "payload": {
+        "text": "Refit H-0002 on 1010 observations: 3.193*m1*m2*exp(0.002441*r)/r**2.404 -> 3.204*m1*m2*exp(-0.0006988*r)/r**2.401"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 1010 observations: 3.193*m1*m2*exp(0.002441*r)/r**2.404 -> 3.204*m1*m2*exp(-0.0006988*r)/r**2.401"
+    },
+    {
+      "index": 30,
+      "kind": "experiment",
+      "timestamp": 1790379548.8944051,
+      "payload": {
+        "experiment_id": "E-0009",
+        "summary": "active (standardized disagreement 1.34); usable"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0009: active (standardized disagreement 1.34); usable."
+    },
+    {
+      "index": 31,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379548.8958652,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "experiment_id": "E-0009",
+        "verdict": "supports",
+        "inside": 0.9702970297029703,
+        "median_z": 0.7019179971889301,
+        "log_density": 410.9527782190141,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Tested H-0001 on E-0009: supports; 97% of observations inside its 95% interval (median |z| 0.70)."
+    },
+    {
+      "index": 32,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379548.899817,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "experiment_id": "E-0009",
+        "verdict": "supports",
+        "inside": 0.9752475247524752,
+        "median_z": 0.6190571342851532,
+        "log_density": 405.25718081617924,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Tested H-0002 on E-0009: supports; 98% of observations inside its 95% interval (median |z| 0.62)."
+    },
+    {
+      "index": 33,
+      "kind": "note",
+      "timestamp": 1790379550.572128,
+      "payload": {
+        "text": "Refit H-0001 on 1212 observations: 3.202*m1*m2/r**2.402 -> 3.201*m1*m2/r**2.401"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 1212 observations: 3.202*m1*m2/r**2.402 -> 3.201*m1*m2/r**2.401"
+    },
+    {
+      "index": 34,
+      "kind": "note",
+      "timestamp": 1790379550.633426,
+      "payload": {
+        "text": "Refit H-0002 on 1212 observations: 3.204*m1*m2*exp(-0.0006988*r)/r**2.401 -> 3.201*m1*m2*exp(0.0002933*r)/r**2.402"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 1212 observations: 3.204*m1*m2*exp(-0.0006988*r)/r**2.401 -> 3.201*m1*m2*exp(0.0002933*r)/r**2.402"
+    },
+    {
+      "index": 35,
+      "kind": "experiment",
+      "timestamp": 1790379551.574993,
+      "payload": {
+        "experiment_id": "E-0010",
+        "summary": "active (standardized disagreement 0.413); usable"
+      },
+      "hypotheses": [],
+      "text": "Ran experiment E-0010: active (standardized disagreement 0.413); usable."
+    },
+    {
+      "index": 36,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379551.5763042,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "experiment_id": "E-0010",
+        "verdict": "supports",
+        "inside": 0.9455445544554455,
+        "median_z": 0.7464110356786146,
+        "log_density": 655.3999330380054,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Tested H-0001 on E-0010: supports; 95% of observations inside its 95% interval (median |z| 0.75)."
+    },
+    {
+      "index": 37,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379551.5773618,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "experiment_id": "E-0010",
+        "verdict": "supports",
+        "inside": 0.9603960396039604,
+        "median_z": 0.7349807197044229,
+        "log_density": 655.6593495387178,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Tested H-0002 on E-0010: supports; 96% of observations inside its 95% interval (median |z| 0.73)."
+    },
+    {
+      "index": 38,
+      "kind": "note",
+      "timestamp": 1790379553.628911,
+      "payload": {
+        "text": "Refit H-0001 on 1414 observations: 3.201*m1*m2/r**2.401 -> 3.201*m1*m2/r**2.401"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 1414 observations: 3.201*m1*m2/r**2.401 -> 3.201*m1*m2/r**2.401"
+    },
+    {
+      "index": 39,
+      "kind": "note",
+      "timestamp": 1790379553.6884391,
+      "payload": {
+        "text": "Refit H-0002 on 1414 observations: 3.201*m1*m2*exp(0.0002933*r)/r**2.402 -> 3.201*m1*m2*exp(0.0002604*r)/r**2.402"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 1414 observations: 3.201*m1*m2*exp(0.0002933*r)/r**2.402 -> 3.201*m1*m2*exp(0.0002604*r)/r**2.402"
+    },
+    {
+      "index": 40,
+      "kind": "note",
+      "timestamp": 1790379553.702257,
+      "payload": {
+        "text": "Leading hypothesis H-0001 has been SUPPORTED with an unchanged structure for 4 consecutive experiments; autonomous search paused. Status is SUPPORTED, not proven."
+      },
+      "hypotheses": [],
+      "text": "Leading hypothesis H-0001 has been SUPPORTED with an unchanged structure for 4 consecutive experiments; autonomous search paused. Status is SUPPORTED, not proven."
+    },
+    {
+      "index": 41,
+      "kind": "challenge",
+      "timestamp": 1790379594.1910882,
+      "payload": {
+        "experiment_id": "C-6fe7303f",
+        "target": "H-0001 via user",
+        "summary": "supports; 94% inside the 95% interval"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Challenge experiment C-6fe7303f targeted H-0001 via user: supports; 94% inside the 95% interval."
+    },
+    {
+      "index": 42,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379594.198238,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "experiment_id": "C-6fe7303f",
+        "verdict": "supports",
+        "inside": 0.9405940594059405,
+        "median_z": 0.7208454934399451,
+        "log_density": 606.3880456488239,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Tested H-0001 on C-6fe7303f: supports; 94% of observations inside its 95% interval (median |z| 0.72)."
+    },
+    {
+      "index": 43,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379594.201647,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "experiment_id": "C-6fe7303f",
+        "verdict": "supports",
+        "inside": 0.9405940594059405,
+        "median_z": 0.7207402905451779,
+        "log_density": 606.3804167004646,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Tested H-0002 on C-6fe7303f: supports; 94% of observations inside its 95% interval (median |z| 0.72)."
+    },
+    {
+      "index": 44,
+      "kind": "note",
+      "timestamp": 1790379594.301611,
+      "payload": {
+        "text": "Refit H-0001 on 1616 observations: 3.201*m1*m2/r**2.401 -> 3.201*m1*m2/r**2.401"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 1616 observations: 3.201*m1*m2/r**2.401 -> 3.201*m1*m2/r**2.401"
+    },
+    {
+      "index": 45,
+      "kind": "note",
+      "timestamp": 1790379594.43872,
+      "payload": {
+        "text": "Refit H-0002 on 1616 observations: 3.201*m1*m2*exp(0.0002604*r)/r**2.402 -> 3.202*m1*m2*exp(-1.438e-5*r)/r**2.401"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 1616 observations: 3.201*m1*m2*exp(0.0002604*r)/r**2.402 -> 3.202*m1*m2*exp(-1.438e-5*r)/r**2.401"
+    },
+    {
+      "index": 46,
+      "kind": "challenge",
+      "timestamp": 1790379617.212283,
+      "payload": {
+        "experiment_id": "C-c6b3fca1",
+        "target": "H-0001 via extrapolation",
+        "summary": "supports; 96% inside the 95% interval"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Challenge experiment C-c6b3fca1 targeted H-0001 via extrapolation: supports; 96% inside the 95% interval."
+    },
+    {
+      "index": 47,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379617.213547,
+      "payload": {
+        "hypothesis_id": "H-0001",
+        "experiment_id": "C-c6b3fca1",
+        "verdict": "supports",
+        "inside": 0.9603960396039604,
+        "median_z": 0.7899578403674481,
+        "log_density": 568.048595490081,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Tested H-0001 on C-c6b3fca1: supports; 96% of observations inside its 95% interval (median |z| 0.79)."
+    },
+    {
+      "index": 48,
+      "kind": "hypothesis_updated",
+      "timestamp": 1790379617.215032,
+      "payload": {
+        "hypothesis_id": "H-0002",
+        "experiment_id": "C-c6b3fca1",
+        "verdict": "supports",
+        "inside": 0.9653465346534653,
+        "median_z": 0.7619754230997612,
+        "log_density": 567.7257836492104,
+        "observations": 202
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Tested H-0002 on C-c6b3fca1: supports; 97% of observations inside its 95% interval (median |z| 0.76)."
+    },
+    {
+      "index": 49,
+      "kind": "note",
+      "timestamp": 1790379617.2767448,
+      "payload": {
+        "text": "Refit H-0001 on 1818 observations: 3.201*m1*m2/r**2.401 -> 3.202*m1*m2/r**2.402"
+      },
+      "hypotheses": [
+        "H-0001"
+      ],
+      "text": "Refit H-0001 on 1818 observations: 3.201*m1*m2/r**2.401 -> 3.202*m1*m2/r**2.402"
+    },
+    {
+      "index": 50,
+      "kind": "note",
+      "timestamp": 1790379617.3788748,
+      "payload": {
+        "text": "Refit H-0002 on 1818 observations: 3.202*m1*m2*exp(-1.438e-5*r)/r**2.401 -> 3.2*m1*m2*exp(0.0004025*r)/r**2.402"
+      },
+      "hypotheses": [
+        "H-0002"
+      ],
+      "text": "Refit H-0002 on 1818 observations: 3.202*m1*m2*exp(-1.438e-5*r)/r**2.401 -> 3.2*m1*m2*exp(0.0004025*r)/r**2.402"
+    }
+  ],
+  "metrics": {
+    "ledger": {
+      "experiments": 12,
+      "observations": 2424,
+      "steps": 1200,
+      "seconds": 0.6161041679999926
+    },
+    "evaluation": {
+      "available": true,
+      "label": "EVALUATION ONLY: compares Kynovar's theory with the hidden ground truth; Kynovar never sees this.",
+      "ground_truth": "F = 3.2 * m1 * m2 / r^2.4",
+      "ground_truth_latex": "\\frac{3.2 m_{1} m_{2}}{r^{2.4}}",
+      "discovered": "3.202*m1*m2/r**2.402",
+      "discovered_latex": "\\frac{3.202 m_{1} m_{2}}{r^{2.402}}",
+      "discovered_status": "SUPPORTED",
+      "structural_match": true,
+      "recovered": true,
+      "max_coefficient_relative_error": 0.0006249999999999312,
+      "max_exponent_abs_error": 0.002000000000000224,
+      "trajectory_rmse_test_designs": [
+        6.934713802180767e-05,
+        7.32127501328379e-05,
+        5.741895497032049e-05
+      ],
+      "trajectory_rmse_mean": 6.66596143749887e-05,
+      "experiments_to_first_correct_leader": 4,
+      "experiments_total": 12
+    }
+  }
+}

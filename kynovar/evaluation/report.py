@@ -83,6 +83,24 @@ def render_benchmark_markdown(payload: dict) -> str:
             ]
         )
         lines.extend(_table(models, horizons, channel="position_bounded"))
+    if models and "1" in horizons and "acceleration" in models[0]["horizons"]["1"]:
+        lines.extend(
+            [
+                "",
+                "## One-step acceleration",
+                "",
+                "| Model | Acceleration RMSE | Acceleration R² | Relative RMSE | Bounded acceleration RMSE |",
+                "| --- | ---: | ---: | ---: | ---: |",
+            ]
+        )
+        for model in models:
+            metrics = model["horizons"]["1"]
+            acc = metrics["acceleration"]
+            bounded = metrics.get("acceleration_bounded") or {}
+            lines.append(
+                f"| {model['model']} | {_cell(acc['rmse'])} | {_cell(acc.get('r2'))} | "
+                f"{_cell(acc.get('relative_rmse'))} | {_cell(bounded.get('rmse'))} |"
+            )
     comparison = payload.get("rollout_training_comparison") or []
     if comparison:
         lines.extend(["", "## Rollout-aware training", ""])

@@ -1,0 +1,54 @@
+# Universe regimes for stable-v1.
+#
+# `prior` overrides the sampling box in power_law.yaml. `acceptance` is checked
+# on the OBSERVED trajectory (positions, velocities, accelerations). A rejected
+# experiment is resampled with new initial conditions. Rejection never edits
+# a trajectory and never reads a hidden parameter.
+version: 1
+regimes:
+  stable:
+    description: Primary training regime. Moderate exponents, well-separated bodies, no ejections.
+    prior:
+      k_range: [0.5, 4.0]
+      p_range: [1.0, 2.5]
+      mass_range: [0.5, 2.0]
+      position_range: [-2.5, 2.5]
+      velocity_range: [-0.3, 0.3]
+      minimum_center_distance: 1.0
+      count_range: [2, 4]
+    acceptance:
+      max_position: 6.0
+      max_speed: 4.0
+      max_acceleration: 40.0
+      min_separation: 0.3
+      max_attempts: 60
+  challenging:
+    description: Full default prior with a looser acceptance box. Close encounters allowed.
+    prior:
+      minimum_center_distance: 0.6
+    acceptance:
+      max_position: 12.0
+      max_speed: 12.0
+      max_acceleration: 400.0
+      min_separation: 0.12
+      max_attempts: 60
+  controlled_two_body:
+    description: Two bodies, one hidden pairwise law shared by every universe. No drag, gravity, springs, or collisions.
+    prior:
+      k_range: [4.0, 4.0]
+      p_range: [3.0, 3.0]
+      count_range: [2, 2]
+      mass_range: [0.5, 2.0]
+      position_range: [-2.0, 2.0]
+      velocity_range: [-0.4, 0.4]
+      minimum_center_distance: 1.2
+    acceptance:
+      max_position: 6.0
+      max_speed: 4.0
+      max_acceleration: 40.0
+      min_separation: 0.4
+      max_attempts: 80
+  extreme:
+    description: Full default prior with no rejection. Stress test only. Includes ejections.
+    prior: {}
+    acceptance: null

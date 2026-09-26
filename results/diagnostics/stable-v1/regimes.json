@@ -1,0 +1,368 @@
+{
+  "record_type": "evaluation_diagnostic",
+  "warning": "Contains hidden law parameters. Evaluation only.",
+  "prior": "configs/simulator/power_law.yaml",
+  "duration": 3.0,
+  "dt": 0.02,
+  "summary": {
+    "trajectories": 300,
+    "unstable_fraction": 0.9633333333333334,
+    "mean_fraction_outside": 0.5039036055923473,
+    "median_max_acceleration": 1560.9783867033111,
+    "p95_max_acceleration": 202762.8151325623,
+    "median_max_position": 86.55909386838,
+    "near_singular_trajectories": 156,
+    "overlap_trajectories": 285,
+    "nonfinite_values": 0
+  },
+  "run": {
+    "project": "kynovar",
+    "version": "0.2.0",
+    "git_commit": "002d63ca501846445be7c2b8c6c5669e31c0581d",
+    "timestamp": "2026-09-25T22:02:06.423454+00:00",
+    "python": "3.12.4",
+    "numpy": "2.5.3",
+    "platform": "macOS-14.6.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "instability_by_k_p": {
+    "k_edges": [
+      0.5,
+      2.4,
+      4.3,
+      6.199999999999999,
+      8.1,
+      10.0
+    ],
+    "p_edges": [
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0
+    ],
+    "unstable_fraction": [
+      [
+        1.0,
+        1.0,
+        1.0,
+        0.8333333333333334,
+        0.9285714285714286,
+        1.0,
+        0.75
+      ],
+      [
+        0.8,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.8333333333333334
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.875,
+        0.8333333333333334
+      ]
+    ]
+  },
+  "instability_by_initial_separation": [
+    {
+      "low": 0.4,
+      "high": 0.6,
+      "count": 33,
+      "unstable_fraction": 1.0
+    },
+    {
+      "low": 0.6,
+      "high": 0.8,
+      "count": 43,
+      "unstable_fraction": 1.0
+    },
+    {
+      "low": 0.8,
+      "high": 1.0,
+      "count": 32,
+      "unstable_fraction": 0.96875
+    },
+    {
+      "low": 1.0,
+      "high": 1.5,
+      "count": 74,
+      "unstable_fraction": 1.0
+    },
+    {
+      "low": 1.5,
+      "high": 2.0,
+      "count": 43,
+      "unstable_fraction": 1.0
+    },
+    {
+      "low": 2.0,
+      "high": 6.0,
+      "count": 75,
+      "unstable_fraction": 0.8666666666666667
+    }
+  ],
+  "instability_by_initial_acceleration": [
+    {
+      "low": 0.0,
+      "high": 1.0,
+      "count": 28,
+      "unstable_fraction": 0.6785714285714286
+    },
+    {
+      "low": 1.0,
+      "high": 3.0,
+      "count": 28,
+      "unstable_fraction": 0.9642857142857143
+    },
+    {
+      "low": 3.0,
+      "high": 10.0,
+      "count": 93,
+      "unstable_fraction": 0.989247311827957
+    },
+    {
+      "low": 10.0,
+      "high": 30.0,
+      "count": 76,
+      "unstable_fraction": 1.0
+    },
+    {
+      "low": 30.0,
+      "high": 100.0,
+      "count": 57,
+      "unstable_fraction": 1.0
+    },
+    {
+      "low": 100.0,
+      "high": 1000000000000.0,
+      "count": 18,
+      "unstable_fraction": 1.0
+    }
+  ],
+  "regime_priors_before_rejection": {
+    "stable": {
+      "prior_only_no_rejection": {
+        "trajectories": 80,
+        "unstable_fraction": 0.8,
+        "mean_fraction_outside": 0.16887417218543047,
+        "median_max_acceleration": 242.64256240887286,
+        "p95_max_acceleration": 6236.633164085655,
+        "median_max_position": 7.858702336459099,
+        "near_singular_trajectories": 55,
+        "overlap_trajectories": 73,
+        "nonfinite_values": 0
+      }
+    },
+    "challenging": {
+      "prior_only_no_rejection": {
+        "trajectories": 80,
+        "unstable_fraction": 0.95,
+        "mean_fraction_outside": 0.4389624724061811,
+        "median_max_acceleration": 1067.0834466979913,
+        "p95_max_acceleration": 535076.9038780495,
+        "median_max_position": 74.54690102926085,
+        "near_singular_trajectories": 43,
+        "overlap_trajectories": 76,
+        "nonfinite_values": 0
+      }
+    },
+    "extreme": {
+      "prior_only_no_rejection": {
+        "trajectories": 80,
+        "unstable_fraction": 0.95,
+        "mean_fraction_outside": 0.44613686534216335,
+        "median_max_acceleration": 968.6450675785013,
+        "p95_max_acceleration": 535076.9038780495,
+        "median_max_position": 61.273911843666156,
+        "near_singular_trajectories": 43,
+        "overlap_trajectories": 76,
+        "nonfinite_values": 0
+      }
+    }
+  },
+  "timestep_study": [
+    {
+      "case": "circular orbit k=3, p=2, r=2",
+      "k": 3.0,
+      "p": 2.0,
+      "duration": 3.0,
+      "reference_dt": 0.0005,
+      "rows": [
+        {
+          "dt": 0.02,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 0.032086687363362974,
+          "max_position_error": 0.032086687363362974,
+          "mean_position_error": 0.015632017887497497
+        },
+        {
+          "dt": 0.02,
+          "integrator": "rk4",
+          "final_position_error": 4.830268916497797e-09,
+          "max_position_error": 4.830268916497797e-09,
+          "mean_position_error": 1.5535544686229012e-09
+        },
+        {
+          "dt": 0.01,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 0.016136627276461764,
+          "max_position_error": 0.016136627276461764,
+          "mean_position_error": 0.007832525593713823
+        },
+        {
+          "dt": 0.01,
+          "integrator": "rk4",
+          "final_position_error": 2.9772081987348956e-10,
+          "max_position_error": 2.9772081987348956e-10,
+          "mean_position_error": 9.572747775795773e-11
+        },
+        {
+          "dt": 0.005,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 0.00809123491875339,
+          "max_position_error": 0.00809123491875339,
+          "mean_position_error": 0.003920225984778516
+        },
+        {
+          "dt": 0.005,
+          "integrator": "rk4",
+          "final_position_error": 1.8470511057304765e-11,
+          "max_position_error": 1.8470511057304765e-11,
+          "mean_position_error": 5.9388872445491956e-12
+        }
+      ]
+    },
+    {
+      "case": "eccentric orbit k=2, p=2.5, r=2, 60% circular speed",
+      "k": 2.0,
+      "p": 2.5,
+      "duration": 3.0,
+      "reference_dt": 0.0005,
+      "rows": [
+        {
+          "dt": 0.02,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 0.5195284734701944,
+          "max_position_error": 0.5195284734701944,
+          "mean_position_error": 0.08159940270186376
+        },
+        {
+          "dt": 0.02,
+          "integrator": "rk4",
+          "final_position_error": 0.6597677971659132,
+          "max_position_error": 0.694242997728395,
+          "mean_position_error": 0.08809866119868774
+        },
+        {
+          "dt": 0.01,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 0.1972582400149046,
+          "max_position_error": 0.1972582400149046,
+          "mean_position_error": 0.030998789743989688
+        },
+        {
+          "dt": 0.01,
+          "integrator": "rk4",
+          "final_position_error": 0.03792821540019092,
+          "max_position_error": 0.03792821540019092,
+          "mean_position_error": 0.003905736739641563
+        },
+        {
+          "dt": 0.005,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 0.05664280397565623,
+          "max_position_error": 0.05664280397565623,
+          "mean_position_error": 0.009525514010237249
+        },
+        {
+          "dt": 0.005,
+          "integrator": "rk4",
+          "final_position_error": 0.0013995023756351596,
+          "max_position_error": 0.0013995023756351596,
+          "mean_position_error": 0.00015291517646383906
+        }
+      ]
+    },
+    {
+      "case": "close pass k=9, p=3.8, r=1, 30% circular speed",
+      "k": 9.0,
+      "p": 3.8,
+      "duration": 1.0,
+      "reference_dt": 0.0005,
+      "rows": [
+        {
+          "dt": 0.02,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 415534.0451906567,
+          "max_position_error": 415534.0451906567,
+          "mean_position_error": 161198.2136438898
+        },
+        {
+          "dt": 0.02,
+          "integrator": "rk4",
+          "final_position_error": 415160.73769742623,
+          "max_position_error": 415160.73769742623,
+          "mean_position_error": 161053.62396464168
+        },
+        {
+          "dt": 0.01,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 415536.29038687417,
+          "max_position_error": 415536.29038687417,
+          "mean_position_error": 160714.643096893
+        },
+        {
+          "dt": 0.01,
+          "integrator": "rk4",
+          "final_position_error": 406173.72998316376,
+          "max_position_error": 406173.72998316376,
+          "mean_position_error": 157099.3726956876
+        },
+        {
+          "dt": 0.005,
+          "integrator": "semi-implicit Euler",
+          "final_position_error": 415536.7258747408,
+          "max_position_error": 415536.7258747408,
+          "mean_position_error": 160479.06472074773
+        },
+        {
+          "dt": 0.005,
+          "integrator": "rk4",
+          "final_position_error": 423392.61358525435,
+          "max_position_error": 423392.61358525435,
+          "mean_position_error": 163488.5035445841
+        }
+      ]
+    }
+  ],
+  "seconds": 7.196365832933225
+}

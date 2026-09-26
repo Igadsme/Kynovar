@@ -1,0 +1,40 @@
+name: stable-v1
+models: [constant_velocity, linear, mlp, gru, gnn, interaction_gnn_single, interaction_gnn]
+rollout_comparison_model: interaction_gnn
+dataset:
+  regime: stable
+  worlds: 80
+  experiments_per_world: 8
+  duration: 2.0
+  dt: 0.01
+  difficulty: 2
+  seed: 101
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  seed: 101
+train:
+  epochs: 12
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  seed: 101
+  device: auto
+  sequence_length: 8
+  stride: 4
+  rollout_steps: 1
+  hidden_dim: 64
+  gnn_layers: 2
+  patience: 4
+  lambda_acceleration: 1.0
+  lambda_position: 1.0
+  lambda_velocity: 1.0
+  lambda_rollout: 1.0
+  relative_acceleration: 1.0
+eval:
+  horizons: [1, 10, 25, 50, 100, 150]
+  stride: 5
+  num_workers: 0
+  ood_worlds: 8
+  ood_experiments: 3

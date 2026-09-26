@@ -9,9 +9,9 @@ import torch
 
 from kynovar.data.config import RunConfig
 from kynovar.data.dataset import TrajectoryStore
-from kynovar.data.generate import default_settings, generate_dataset
+from kynovar.data.generate import GenerationSettings, default_settings, generate_dataset
 from kynovar.data.normalize import fit_normalizer, load_normalizer, save_normalizer
-from kynovar.data.ood import ood_cases
+from kynovar.data.ood import ood_cases, regime_ood_cases
 from kynovar.data.splits import assert_disjoint_splits, read_splits, split_universe_ids, write_splits
 from kynovar.evaluation.plots import (
     plot_benchmark_bars,
@@ -41,6 +41,7 @@ def prepare_dataset(config: RunConfig, root: Path | None = None) -> tuple[Trajec
         dt=config.dt,
         dataset_seed=config.dataset_seed,
         difficulty=config.difficulty,
+        regime=config.regime,
     )
     generate_dataset(dataset_dir, settings)
     store = TrajectoryStore(dataset_dir)
@@ -66,21 +67,10 @@ def run_benchmark(config: RunConfig, retrain: bool = False, include_rollout_mode
     repo = find_repo_root()
     store, splits, normalizer = prepare_dataset(config)
     device = select_device(config.device)
-    jobs = [
-        ("constant_velocity", "constant_velocity", {}),
-        ("linear", "linear", {}),
-        ("mlp", "mlp", {}),
-        ("gru", "gru", {}),
-        ("gnn", "gnn", {}),
-    ]
+    jobs = [(name, name, {}) for name in config.models]
+    rollout_name = f"{config.rollout_comparison_model}_rollout"
     if include_rollout_model:
-        jobs.append(
-            (
-                "gnn_rollout",
-                "gnn",
-                {"rollout_steps": 4, "lambda_rollout": 1.0},
-            )
-        )
+        jobs.append((rollout_name, config.rollout_comparison_model, {"rollout_steps": 4, "lambda_rollout": 1.0}))
     checkpoint_dir = repo / "checkpoints" / config.name
     histories = {}
     measured = []
@@ -118,7 +108,7 @@ def run_benchmark(config: RunConfig, retrain: bool = False, include_rollout_mode
             histories[checkpoint_name] = payload["epoch_history"]
         model, payload = load_trained_model(checkpoint, normalizer, device)
         horizons = _feasible(store, splits["test"], int(model.history), config.horizons)
-        scores = evaluate_horizons(model, store, splits["test"], horizons, stride=1, device=device)
+        scores = evaluate_horizons(model, store, splits["test"], horizons, stride=config.eval_stride, device=device)
         if checkpoint_name not in histories and "epoch_history" in payload:
             histories[checkpoint_name] = payload["epoch_history"]
         measured.append(
@@ -134,23 +124,35 @@ def run_benchmark(config: RunConfig, retrain: bool = False, include_rollout_mode
             }
         )
         print(f"evaluated {checkpoint_name} horizons={list(scores)}", flush=True)
-    primary = [row for row in measured if row["model"] != "gnn_rollout"]
+    primary = [row for row in measured if row["model"] != rollout_name]
+    loss = (
+        "Learned models minimize a Huber loss on residuals divided by the training-set "
+        "median absolute deviation. Reported RMSE stays in physical units."
+    )
+    if config.relative_acceleration:
+        loss = (
+            "The acceleration term is a Huber loss on (a_hat - a) / (|a| + s), where s is the training "
+            "acceleration scale; position and velocity terms use the median absolute deviation. "
+            "Reported RMSE stays in physical units."
+        )
     report = {
         "title": f"Kynovar dynamics benchmark ({config.name})",
         "dataset": config.name,
+        "regime": config.regime,
         "device": str(device),
         "run": runtime_record(repo, seed=config.train_seed),
+        "config": {key: (list(value) if isinstance(value, tuple) else value) for key, value in config.__dict__.items()},
         "universes": _split_counts(splits),
+        "eval_stride": config.eval_stride,
         "models": primary,
-        "rollout_training_comparison": [row for row in measured if row["model"] in {"gnn", "gnn_rollout"}],
+        "rollout_training_comparison": [
+            row for row in measured if row["model"] in {config.rollout_comparison_model, rollout_name}
+        ],
         "rollout_training_note": (
-            "gnn is trained to predict the next step. "
-            "gnn_rollout uses the same architecture with rollout_steps=4 and lambda_rollout=1."
+            f"{config.rollout_comparison_model} is trained to predict the next step. "
+            f"{rollout_name} uses the same architecture with rollout_steps=4 and lambda_rollout=1."
         ),
-        "loss": (
-            "Learned models minimize a Huber loss on residuals divided by the training-set "
-            "median absolute deviation. Reported RMSE stays in physical units."
-        ),
+        "loss": loss,
     }
     # runtime_record includes seed when passed. The benchmark record is an operator
     # report, not a model input. Drop it from any path the dataset loader reads.
@@ -165,7 +167,9 @@ def run_benchmark(config: RunConfig, retrain: bool = False, include_rollout_mode
     if shared:
         chosen = [item for item in shared if int(item) in {1, 10, 50}] or shared[:3]
         plot_benchmark_bars(primary, plot_dir / "benchmark_bars.png", chosen)
-    _plot_example(store, splits["test"], checkpoint_dir, normalizer, device, plot_dir)
+    graph_models = [name for name in config.models if "gnn" in name]
+    if graph_models:
+        _plot_example(store, splits["test"], checkpoint_dir / f"{graph_models[-1]}.pt", normalizer, device, plot_dir)
     store.close()
     return report
 
@@ -176,27 +180,34 @@ def run_ood(config: RunConfig) -> dict:
     device = select_device(config.device)
     normalizer = load_normalizer(repo / "datasets" / "processed" / config.name / "normalization.json")
     checkpoint_dir = repo / "checkpoints" / config.name
-    cases = ood_cases(base, config.duration, config.dt)
+    if config.regime is None:
+        cases = ood_cases(base, config.duration, config.dt)
+    else:
+        cases = regime_ood_cases(base, config.regime, config.duration, config.dt)
     scenarios = []
     for case in cases:
         dataset_dir = repo / "datasets" / "generated" / f"{config.name}_ood_{case.name}"
-        settings = default_settings(
+        settings = GenerationSettings(
             name=f"{config.name}_ood_{case.name}",
-            worlds=4,
-            experiments_per_world=2,
+            worlds=config.ood_worlds,
+            experiments_per_world=config.ood_experiments,
             duration=case.duration,
             dt=config.dt,
             dataset_seed=config.dataset_seed + case.dataset_seed_offset,
             difficulty=config.difficulty,
             config=case.config,
+            acceptance=case.acceptance,
+            regime=case.regime,
         )
         generate_dataset(dataset_dir, settings)
         store = TrajectoryStore(dataset_dir)
         model_rows = []
-        for checkpoint_name in ("constant_velocity", "linear", "mlp", "gru", "gnn"):
+        for checkpoint_name in config.models:
             model, payload = load_trained_model(checkpoint_dir / f"{checkpoint_name}.pt", normalizer, device)
             horizons = _feasible(store, store.universe_ids, int(model.history), case.horizons)
-            scores = evaluate_horizons(model, store, store.universe_ids, horizons, stride=1, device=device)
+            scores = evaluate_horizons(
+                model, store, store.universe_ids, horizons, stride=config.eval_stride, device=device
+            )
             model_rows.append(
                 {
                     "model": checkpoint_name,
@@ -208,6 +219,7 @@ def run_ood(config: RunConfig) -> dict:
         scenarios.append(
             {
                 "name": case.name,
+                "severity": case.severity,
                 "description": case.description,
                 "universes": len(store.universe_ids),
                 "models": model_rows,
@@ -257,11 +269,11 @@ def _split_counts(splits: dict[str, list[str]]) -> dict[str, int]:
     return {name: len(ids) for name, ids in splits.items()}
 
 
-def _plot_example(store, test_ids, checkpoint_dir, normalizer, device, plot_dir: Path) -> None:
+def _plot_example(store, test_ids, checkpoint_path: Path, normalizer, device, plot_dir: Path) -> None:
     universe_id = test_ids[0]
     states_np = store.load_states(universe_id, 0)
-    model, _payload = load_trained_model(checkpoint_dir / "gnn.pt", normalizer, device)
-    horizon = min(50, states_np.shape[0] - model.history)
+    model, _payload = load_trained_model(checkpoint_path, normalizer, device)
+    horizon = min(100, states_np.shape[0] - model.history)
     if horizon < 1:
         return
     time = model.history - 1
@@ -271,7 +283,7 @@ def _plot_example(store, test_ids, checkpoint_dir, normalizer, device, plot_dir:
     future, _acc = rollout_future(model, window, mask, dt, horizon)
     predicted = future[0, :, :, 0:2].detach().cpu().numpy()
     truth = states_np[time + 1 : time + 1 + horizon, :, 0:2]
-    plot_trajectory(truth, predicted, plot_dir / "trajectory_overlay.png", f"GNN rollout {universe_id}")
+    plot_trajectory(truth, predicted, plot_dir / "trajectory_overlay.png", f"{checkpoint_path.stem} rollout {universe_id}")
     np.savez_compressed(
         plot_dir / "trajectory_overlay.npz",
         truth=truth,

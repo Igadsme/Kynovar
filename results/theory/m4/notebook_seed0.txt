@@ -1,0 +1,60 @@
+[0000] Ran experiment early-batch: 8 narrow-range two-body experiments, 496 observations.
+[0001] Proposed H-0001: F = 2.478*m1*m2/r**2.044 + 0.02929*m1*m2 (weighted NMSE 0.00783, complexity 12).
+[0002] Proposed H-0002: F = 2.487*m1**0.9993*m2**0.9888/r**1.977 (weighted NMSE 0.00773, complexity 11).
+[0003] Proposed H-0003: F = 2.488*m1*m2**0.9891/r**1.979 (weighted NMSE 0.00773, complexity 9).
+[0004] Proposed H-0004: F = 9.271*m1*m2*exp(-1.41*r) (weighted NMSE 0.0087, complexity 8).
+[0005] Proposed H-0005: F = -1.68*m1*m2*r + 3.659*m1*m2 (weighted NMSE 0.0148, complexity 10).
+[0006] Proposed H-0006: F = 2.497*m1*m2/r**1.996 (weighted NMSE 0.00783, complexity 7).
+[0007] H-0003 status PROPOSED -> SUPERSEDED: merged into H-0002: same structure, overlapping parameter intervals.
+[0008] Merged H-0003 into H-0002: same structure and overlapping 95% parameter intervals.
+[0009] Ran experiment early_holdout-0: 62 observations, separations 1.23-1.34.
+[0010] Tested H-0001 on early_holdout-0: supports; 94% of observations inside its 95% interval (median |z| 0.60).
+[0011] Tested H-0002 on early_holdout-0: supports; 97% of observations inside its 95% interval (median |z| 0.66).
+[0012] Tested H-0004 on early_holdout-0: supports; 97% of observations inside its 95% interval (median |z| 0.64).
+[0013] Tested H-0005 on early_holdout-0: supports; 100% of observations inside its 95% interval (median |z| 0.54).
+[0014] Tested H-0006 on early_holdout-0: supports; 94% of observations inside its 95% interval (median |z| 0.60).
+[0015] Ran experiment early_holdout-1: 62 observations, separations 1.15-1.34.
+[0016] Tested H-0001 on early_holdout-1: supports; 100% of observations inside its 95% interval (median |z| 0.65).
+[0017] H-0001 status PROPOSED -> SUPPORTED: 2 supporting experiments, none contradicting.
+[0018] Tested H-0002 on early_holdout-1: supports; 100% of observations inside its 95% interval (median |z| 0.78).
+[0019] H-0002 status PROPOSED -> SUPPORTED: 2 supporting experiments, none contradicting.
+[0020] Tested H-0004 on early_holdout-1: supports; 100% of observations inside its 95% interval (median |z| 0.75).
+[0021] H-0004 status PROPOSED -> SUPPORTED: 2 supporting experiments, none contradicting.
+[0022] Tested H-0005 on early_holdout-1: supports; 94% of observations inside its 95% interval (median |z| 0.57).
+[0023] H-0005 status PROPOSED -> SUPPORTED: 2 supporting experiments, none contradicting.
+[0024] Tested H-0006 on early_holdout-1: supports; 100% of observations inside its 95% interval (median |z| 0.66).
+[0025] H-0006 status PROPOSED -> SUPPORTED: 2 supporting experiments, none contradicting.
+[0026] Ran experiment early_holdout-2: 62 observations, separations 1.48-1.55.
+[0027] Tested H-0001 on early_holdout-2: supports; 90% of observations inside its 95% interval (median |z| 0.82).
+[0028] Tested H-0002 on early_holdout-2: supports; 90% of observations inside its 95% interval (median |z| 0.86).
+[0029] Tested H-0004 on early_holdout-2: supports; 94% of observations inside its 95% interval (median |z| 0.74).
+[0030] Tested H-0005 on early_holdout-2: supports; 100% of observations inside its 95% interval (median |z| 0.37).
+[0031] Tested H-0006 on early_holdout-2: supports; 89% of observations inside its 95% interval (median |z| 0.83).
+[0032] Ran experiment early_holdout-3: 62 observations, separations 1.53-1.62.
+[0033] Tested H-0001 on early_holdout-3: supports; 92% of observations inside its 95% interval (median |z| 0.68).
+[0034] Tested H-0002 on early_holdout-3: supports; 92% of observations inside its 95% interval (median |z| 0.75).
+[0035] Tested H-0004 on early_holdout-3: supports; 97% of observations inside its 95% interval (median |z| 0.63).
+[0036] Tested H-0005 on early_holdout-3: supports; 100% of observations inside its 95% interval (median |z| 0.38).
+[0037] Tested H-0006 on early_holdout-3: supports; 92% of observations inside its 95% interval (median |z| 0.69).
+[0038] Ran experiment wide-0: 202 observations, separations 3.28-3.35.
+[0039] Tested H-0001 on wide-0: supports; 100% of observations inside its 95% interval (median |z| 0.17).
+[0040] Tested H-0002 on wide-0: supports; 86% of observations inside its 95% interval (median |z| 0.93).
+[0041] Tested H-0004 on wide-0: contradicts; 0% of observations inside its 95% interval (median |z| 14.84).
+[0042] H-0004 status SUPPORTED -> CONTRADICTED: 1 contradicting experiment(s); latest wide-0 had 0% inside the 95% interval.
+[0043] Tested H-0005 on wide-0: contradicts; 0% of observations inside its 95% interval (median |z| 6.20).
+[0044] H-0005 status SUPPORTED -> CONTRADICTED: 1 contradicting experiment(s); latest wide-0 had 0% inside the 95% interval.
+[0045] Tested H-0006 on wide-0: supports; 88% of observations inside its 95% interval (median |z| 0.80).
+[0046] Ran experiment wide-1: 202 observations, separations 2.94-3.43.
+[0047] Tested H-0001 on wide-1: supports; 100% of observations inside its 95% interval (median |z| 0.15).
+[0048] Tested H-0002 on wide-1: supports; 86% of observations inside its 95% interval (median |z| 0.93).
+[0049] Tested H-0006 on wide-1: supports; 90% of observations inside its 95% interval (median |z| 0.86).
+[0050] Ran experiment wide-2: 202 observations, separations 2.72-3.07.
+[0051] Tested H-0001 on wide-2: supports; 100% of observations inside its 95% interval (median |z| 0.17).
+[0052] Tested H-0002 on wide-2: supports; 90% of observations inside its 95% interval (median |z| 0.86).
+[0053] Tested H-0006 on wide-2: supports; 93% of observations inside its 95% interval (median |z| 0.78).
+[0054] Ran experiment wide-3: 202 observations, separations 2.36-2.99.
+[0055] Tested H-0001 on wide-3: supports; 100% of observations inside its 95% interval (median |z| 0.19).
+[0056] Tested H-0002 on wide-3: supports; 93% of observations inside its 95% interval (median |z| 0.95).
+[0057] Tested H-0006 on wide-3: supports; 94% of observations inside its 95% interval (median |z| 0.89).
+[0058] H-0001 status SUPPORTED -> SUPERSEDED: superseded by H-0002: nested simpler hypothesis H-0002 scores 2.09 >= 1.14 on the same observations.
+[0059] Ranking by penalized log predictive density (not a probability): H-0006 (2.22), H-0002 (2.09).

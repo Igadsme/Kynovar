@@ -1,0 +1,80 @@
+world=inverse_square_k2.5 seed=0 strategy=passive identified_at=5 final=2.458*m1*m2/r**1.984 seconds=5.5
+world=inverse_square_k2.5 seed=0 strategy=random identified_at=5 final=2.489*m1*m2/r**2.017 seconds=3.8
+world=inverse_square_k2.5 seed=0 strategy=grid identified_at=3 final=2.499*m1*m2/r**2.022 seconds=4.7
+world=inverse_square_k2.5 seed=0 strategy=active identified_at=3 final=2.472*m1*m2/r**1.997 seconds=5.8
+world=inverse_square_k2.5 seed=1 strategy=passive identified_at=4 final=2.477*m1*m2/r**2.009 seconds=9.7
+world=inverse_square_k2.5 seed=1 strategy=random identified_at=3 final=2.509*m1*m2/r**2.026 seconds=11.2
+world=inverse_square_k2.5 seed=1 strategy=grid identified_at=3 final=2.527*m1*m2/r**2.033 seconds=10.0
+world=inverse_square_k2.5 seed=1 strategy=active identified_at=3 final=2.469*m1*m2/r**2.002 seconds=13.6
+world=inverse_square_k2.5 seed=2 strategy=passive identified_at=5 final=2.426*m1*m2/r**1.955 seconds=17.1
+world=inverse_square_k2.5 seed=2 strategy=random identified_at=3 final=2.431*m1*m2/r**1.981 seconds=10.9
+world=inverse_square_k2.5 seed=2 strategy=grid identified_at=4 final=2.465*m1*m2/r**2.01 seconds=17.1
+world=inverse_square_k2.5 seed=2 strategy=active identified_at=3 final=2.46*m1*m2/r**1.993 seconds=18.0
+world=inverse_square_k2.5 seed=3 strategy=passive identified_at=4 final=2.522*m1*m2/r**2.058 seconds=18.3
+world=inverse_square_k2.5 seed=3 strategy=random identified_at=4 final=2.479*m1*m2/r**2.014 seconds=11.5
+world=inverse_square_k2.5 seed=3 strategy=grid identified_at=4 final=2.458*m1*m2/r**2.006 seconds=12.5
+world=inverse_square_k2.5 seed=3 strategy=active identified_at=3 final=2.455*m1*m2/r**1.994 seconds=23.4
+world=inverse_square_k2.5 seed=4 strategy=passive identified_at=3 final=2.472*m1*m2/r**2.011 seconds=14.3
+world=inverse_square_k2.5 seed=4 strategy=random identified_at=3 final=2.455*m1*m2/r**2.008 seconds=10.9
+world=inverse_square_k2.5 seed=4 strategy=grid identified_at=3 final=2.477*m1*m2/r**2.009 seconds=11.8
+world=inverse_square_k2.5 seed=4 strategy=active identified_at=3 final=2.432*m1*m2/r**1.978 seconds=18.4
+world=inverse_square_k2.5 seed=5 strategy=passive identified_at=7 final=2.536*m1*m2/r**2.059 seconds=20.1
+world=inverse_square_k2.5 seed=5 strategy=random identified_at=3 final=2.46*m1*m2/r**1.987 seconds=8.9
+world=inverse_square_k2.5 seed=5 strategy=grid identified_at=3 final=2.483*m1*m2/r**2.015 seconds=14.0
+world=inverse_square_k2.5 seed=5 strategy=active identified_at=3 final=2.481*m1*m2/r**2.011 seconds=11.3
+world=inverse_square_k2.5 seed=6 strategy=passive identified_at=5 final=2.402*m1*m2/r**1.914 seconds=11.4
+world=inverse_square_k2.5 seed=6 strategy=random identified_at=4 final=2.41*m1*m2/r**1.96 seconds=10.0
+world=inverse_square_k2.5 seed=6 strategy=grid identified_at=5 final=2.417*m1*m2/r**1.967 seconds=11.5
+world=inverse_square_k2.5 seed=6 strategy=active identified_at=5 final=2.481*m1*m2/r**2.003 seconds=18.7
+world=inverse_square_k2.5 seed=7 strategy=passive identified_at=7 final=2.392*m1*m2/r**1.926 seconds=12.2
+world=inverse_square_k2.5 seed=7 strategy=random identified_at=3 final=2.449*m1*m2/r**2.0 seconds=8.2
+world=inverse_square_k2.5 seed=7 strategy=grid identified_at=3 final=2.44*m1*m2/r**1.992 seconds=11.1
+world=inverse_square_k2.5 seed=7 strategy=active identified_at=3 final=2.452*m1*m2/r**1.992 seconds=16.4
+world=inverse_power_k1.5_p2.6 seed=0 strategy=passive identified_at=4 final=1.488*m1*m2/r**2.619 seconds=7.8
+world=inverse_power_k1.5_p2.6 seed=0 strategy=random identified_at=9 final=1.505*m1*m2/r**2.654 seconds=6.8
+world=inverse_power_k1.5_p2.6 seed=0 strategy=grid identified_at=4 final=1.525*m1*m2/r**2.669 seconds=9.5
+world=inverse_power_k1.5_p2.6 seed=0 strategy=active identified_at=4 final=1.475*m1*m2/r**2.599 seconds=10.1
+world=inverse_power_k1.5_p2.6 seed=1 strategy=passive identified_at=4 final=1.496*m1*m2/r**2.635 seconds=31.4
+world=inverse_power_k1.5_p2.6 seed=1 strategy=random identified_at=4 final=1.509*m1*m2/r**2.65 seconds=16.5
+world=inverse_power_k1.5_p2.6 seed=1 strategy=grid identified_at=10 final=1.55*m1*m2/r**2.69 seconds=20.8
+world=inverse_power_k1.5_p2.6 seed=1 strategy=active identified_at=4 final=1.473*m1*m2/r**2.599 seconds=24.6
+world=inverse_power_k1.5_p2.6 seed=2 strategy=passive identified_at=5 final=1.439*m1*m2/r**2.537 seconds=23.7
+world=inverse_power_k1.5_p2.6 seed=2 strategy=random identified_at=3 final=1.455*m1*m2/r**2.591 seconds=18.5
+world=inverse_power_k1.5_p2.6 seed=2 strategy=grid identified_at=3 final=1.462*m1*m2/r**2.599 seconds=23.1
+world=inverse_power_k1.5_p2.6 seed=2 strategy=active identified_at=3 final=1.469*m1*m2/r**2.614 seconds=25.5
+world=inverse_power_k1.5_p2.6 seed=3 strategy=passive identified_at=10 final=1.524*m1*m2/r**2.684 seconds=32.6
+world=inverse_power_k1.5_p2.6 seed=3 strategy=random identified_at=4 final=1.496*m1*m2/r**2.654 seconds=27.5
+world=inverse_power_k1.5_p2.6 seed=3 strategy=grid identified_at=3 final=1.463*m1*m2/r**2.6 seconds=23.7
+world=inverse_power_k1.5_p2.6 seed=3 strategy=active identified_at=4 final=1.454*m1*m2/r**2.595 seconds=48.2
+world=inverse_power_k1.5_p2.6 seed=4 strategy=passive identified_at=3 final=1.475*m1*m2/r**2.612 seconds=25.3
+world=inverse_power_k1.5_p2.6 seed=4 strategy=random identified_at=3 final=1.49*m1*m2/r**2.66 seconds=16.8
+world=inverse_power_k1.5_p2.6 seed=4 strategy=grid identified_at=3 final=1.502*m1*m2/r**2.65 seconds=18.8
+world=inverse_power_k1.5_p2.6 seed=4 strategy=active identified_at=3 final=1.476*m1*m2/r**2.608 seconds=26.5
+world=inverse_power_k1.5_p2.6 seed=5 strategy=passive identified_at=7 final=1.523*m1*m2/r**2.667 seconds=20.9
+world=inverse_power_k1.5_p2.6 seed=5 strategy=random identified_at=6 final=1.47*m1*m2/r**2.592 seconds=20.4
+world=inverse_power_k1.5_p2.6 seed=5 strategy=grid identified_at=8 final=1.52*m1*m2/r**2.672 seconds=18.1
+world=inverse_power_k1.5_p2.6 seed=5 strategy=active identified_at=3 final=1.482*m1*m2/r**2.618 seconds=29.3
+world=inverse_power_k1.5_p2.6 seed=6 strategy=passive identified_at=5 final=1.457*m1*m2/r**2.552 seconds=25.2
+world=inverse_power_k1.5_p2.6 seed=6 strategy=random identified_at=4 final=1.448*m1*m2/r**2.576 seconds=15.2
+world=inverse_power_k1.5_p2.6 seed=6 strategy=grid identified_at=3 final=1.49*m1*m2/r**2.613 seconds=15.1
+world=inverse_power_k1.5_p2.6 seed=6 strategy=active identified_at=4 final=1.46*m1*m2/r**2.59 seconds=17.3
+world=inverse_power_k1.5_p2.6 seed=7 strategy=passive identified_at=7 final=1.441*m1*m2/r**2.547 seconds=13.1
+world=inverse_power_k1.5_p2.6 seed=7 strategy=random identified_at=3 final=1.477*m1*m2/r**2.637 seconds=15.3
+world=inverse_power_k1.5_p2.6 seed=7 strategy=grid identified_at=3 final=1.472*m1*m2/r**2.605 seconds=12.6
+world=inverse_power_k1.5_p2.6 seed=7 strategy=active identified_at=3 final=1.467*m1*m2/r**2.599 seconds=18.2
+# Milestone 5 experiment selection
+
+Budget 10 experiments, 8 seeds, censored at budget+1 when never identified.
+Acquisition: standardized disagreement: mean over path of Var_h[mean_h] / Mean_h[sigma_h^2]; a heuristic, not information gain.
+
+| World | Strategy | Identified | Mean exps (censored) | Std | Obs. at id. | Wall s at id. |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| inverse_power_k1.5_p2.6 | passive | 8/8 | 5.62 | 2.26 | 349 | 14.9 |
+| inverse_power_k1.5_p2.6 | random | 8/8 | 4.50 | 2.07 | 279 | 9.7 |
+| inverse_power_k1.5_p2.6 | grid | 8/8 | 4.62 | 2.77 | 287 | 9.4 |
+| inverse_power_k1.5_p2.6 | active | 8/8 | 3.50 | 0.53 | 217 | 9.7 |
+| inverse_square_k2.5 | passive | 8/8 | 5.00 | 1.41 | 310 | 8.2 |
+| inverse_square_k2.5 | random | 8/8 | 3.50 | 0.76 | 217 | 4.6 |
+| inverse_square_k2.5 | grid | 8/8 | 3.50 | 0.76 | 217 | 5.9 |
+| inverse_square_k2.5 | active | 8/8 | 3.25 | 0.71 | 202 | 7.1 |
+exit=0

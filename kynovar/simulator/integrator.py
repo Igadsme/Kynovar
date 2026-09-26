@@ -68,3 +68,41 @@ class SemiImplicitEuler(Integrator):
         new_velocities = velocities + accelerations * dt
         new_positions = positions + new_velocities * dt
         return new_positions, new_velocities
+
+
+class RungeKutta4(Integrator):
+    """Classical fourth-order Runge-Kutta. Used as a numerical reference."""
+
+    name: ClassVar[str] = "rk4"
+
+    def step(
+        self,
+        positions: np.ndarray,
+        velocities: np.ndarray,
+        acceleration_fn: AccelerationFn,
+        dt: float,
+    ) -> tuple[np.ndarray, np.ndarray]:
+        if dt <= 0.0 or not np.isfinite(dt):
+            raise SimulatorError(f"dt must be positive and finite, got {dt}.")
+        if positions.shape != velocities.shape or positions.ndim != 2:
+            raise SimulatorError(
+                "positions and velocities must have the same shape (N, D), "
+                f"got {positions.shape} and {velocities.shape}."
+            )
+
+        def accel(x: np.ndarray, v: np.ndarray) -> np.ndarray:
+            value = np.asarray(acceleration_fn(x, v), dtype=np.float64)
+            if value.shape != positions.shape or not np.isfinite(value).all():
+                raise SimulatorError("acceleration_fn returned an invalid value.")
+            return value
+
+        k1x, k1v = velocities, accel(positions, velocities)
+        k2x = velocities + 0.5 * dt * k1v
+        k2v = accel(positions + 0.5 * dt * k1x, k2x)
+        k3x = velocities + 0.5 * dt * k2v
+        k3v = accel(positions + 0.5 * dt * k2x, k3x)
+        k4x = velocities + dt * k3v
+        k4v = accel(positions + dt * k3x, k4x)
+        new_positions = positions + dt / 6.0 * (k1x + 2.0 * k2x + 2.0 * k3x + k4x)
+        new_velocities = velocities + dt / 6.0 * (k1v + 2.0 * k2v + 2.0 * k3v + k4v)
+        return new_positions, new_velocities
