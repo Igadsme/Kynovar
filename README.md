@@ -1,190 +1,150 @@
 # KYNOVAR
 
-Autonomous discovery of physical laws.
+Autonomous discovery and revision of physical laws in unknown simulated universes.
 
-**Milestone 1 is complete. Milestone 2 trains dynamics models on observable trajectories.** Symbolic law discovery, experiment planning, and the web interface are not implemented. Benchmark numbers in [docs/milestone-2.md](docs/milestone-2.md) were measured on this machine. They are not targets.
+Kynovar is an experimental research system that observes sealed dynamical systems, learns trajectory dynamics, proposes symbolic laws, manages competing hypotheses with uncertainty, selects experiments, searches for counterexamples, detects silent changes in the governing physics, revises theories, and exposes the process through an interactive 3D laboratory.
 
-## What is Kynovar?
+> **Evidence status:** M1 is accepted. M2-M8 are implemented. Historical M4/M6/M7 and browser evidence are preserved under `results/`; the repository now includes a sequential acceptance runner for fresh, uncontended validation. Do not interpret implementation or a historical artifact as a fresh PASS unless `results/acceptance/full.json` records it for the current commit.
 
-Kynovar is a research system for a specific question: can a program observe an unknown dynamical system, learn its dynamics, propose equations, choose experiments, and revise those equations when the evidence turns against them?
-
-This milestone builds the world those later stages will study. A deterministic 2D simulator integrates bodies under explicit force laws. A universe generator hides a pairwise power law behind an observation API. A laboratory runs experiments and returns trajectories. Evaluation code is the only path that reads the hidden law.
-
-## Demo
-
-Generate one hidden universe and write the measurements:
-
-```bash
-.venv/bin/python scripts/simulate_world.py \
-  --seed 4 \
-  --difficulty 2 \
-  --duration 0.05 \
-  --dt 0.01 \
-  --output results/demo/seed4_observations.json \
-  --write-ground-truth results/evaluation/seed4_ground_truth.json
-```
-
-On this machine that command printed:
+## System
 
 ```text
-universe_id=K-D6F83A4E
-frames=6
-bodies=4
-observations=/Volumes/T7 Shield/KYNOVAR/results/demo/seed4_observations.json
-ground_truth_file=/Volumes/T7 Shield/KYNOVAR/results/evaluation/seed4_ground_truth.json
+unknown universe
+  -> sealed observation / experiment API
+  -> trajectory datasets and learned dynamics
+  -> symbolic law discovery
+  -> uncertain competing hypotheses
+  -> active experiment selection
+  -> adversarial falsification
+  -> residual change detection + theory revision
+  -> FastAPI + WebSocket API
+  -> Next.js / React Three Fiber 3D laboratory
 ```
 
-The observation file records positions, velocities, accelerations, masses, and radii. The ground-truth file is separate and is labeled evaluation-only. For seed 4 at difficulty 2, that file contains the sampled law `pairwise_power_law` with `k = 9.459033002937492` and `p = 2.2896464348502654`. Those values were read from the evaluation export after the run. They are the hidden parameters of the generator, saved for later scoring.
+The scientist-facing code is intentionally separated from hidden ground truth. Hidden laws are available only to evaluation code and the backend universe registry; tests enforce the information boundary.
 
-## Research question
+## Milestones
 
-Can an AI observe an unknown dynamical system, learn its dynamics, formulate mathematical hypotheses, select experiments that reduce uncertainty, recover governing equations, validate or falsify those equations, detect a change in the physics, and revise its theory?
+| Milestone | Capability | Repository status |
+| --- | --- | --- |
+| M1 | deterministic simulator, hidden universes, laboratory boundary | accepted |
+| M2 | dynamics datasets, CV/linear/MLP/GRU/GNN models, stable-v1, OOD evaluation | implemented; fresh stable-v1 acceptance required |
+| M3 | symbolic regression and law-recovery evaluation | implemented; final rerun required |
+| M4 | hypotheses, uncertainty, evidence lifecycle, scientific notebook | implemented and measured |
+| M5 | passive/random/grid/active experiment campaigns | implemented; clean comparison required |
+| M6 | challenger, prequential tests, counterexample store | implemented and measured |
+| M7 | residual monitoring, change-point estimation, theory versioning | implemented; total-uncertainty validation fix requires fresh seeds |
+| M8 | 3D laboratory, FastAPI/WebSocket backend, Next.js/R3F frontend | implemented; browser evidence preserved |
 
-Milestone 1 builds the environment in which that question can be tested.
-
-## Architecture
-
-Implemented now:
-
-```text
-kynovar/simulator/     2D state, semi-implicit Euler, force laws, collisions
-kynovar/simulator/universe.py
-                       difficulty 1–2 pairwise power-law worlds
-kynovar/laboratory/    Experiment and Laboratory.run
-kynovar/data/          observable datasets, universe splits, streaming, normalization
-kynovar/models/        constant velocity, linear, MLP, GRU, and the dynamics GNN
-kynovar/evaluation/    ground-truth export, rollout metrics, benchmark reports
-kynovar/utils/         path validation, device selection, run metadata
-configs/experiments/   smoke, development, and research training configs
-scripts/               simulate_world, generate_dataset, train_dynamics, run_benchmark, run_ood
-```
-
-Reserved directories still have no scientific code: `discovery/`, `theory/`, `uncertainty/`, `planning/`, `falsification/`, `backend/`, `frontend/`, `paper/`.
-
-`World.observe()` returns kinematics. `World.internal_state()` also returns hidden laws and is for evaluation. The laboratory accepts initial conditions, duration, and timestep. It does not accept force parameters. Details are in [docs/milestone-1.md](docs/milestone-1.md).
-
-## How it works
-
-Each body has an id, position, velocity, mass, and radius. Acceleration is computed from the active force laws and reported as a measurement. The integrator is semi-implicit Euler:
-
-```text
-v <- v + a dt
-x <- x + v dt
-```
-
-The integrator receives an acceleration callback so a later multistage method can evaluate intermediate states. RK4 is not implemented.
-
-Continuous forces:
-
-- constant gravity, `F = m g`
-- pairwise power law, `F_ij = k m_i m_j / r^p`, attractive when `k > 0`
-- linear drag, `F = -c v`
-- quadratic drag, `F = -c |v| v`
-- springs, `F = stiffness (r - rest_length)` along the pair
-
-Collisions are impulsive. The coefficient of restitution `e` is in `[0, 1]`. Overlap is removed along the contact normal, then an impulse is applied when the bodies are approaching. Generated power-law universes leave collisions off, so those worlds have one hidden continuous law.
-
-Difficulty 1 samples `k` and fixes `p = 2`. Difficulty 2 samples both `k` and `p`. The same seed rebuilds the same world. The public id is `K-` plus a hash prefix. It is not the seed.
-
-## Results
-
-Milestone 2 results are in [docs/milestone-2.md](docs/milestone-2.md) and `results/benchmarks/development/`. On the development test universes, constant velocity is a strong baseline. The GRU had the lowest full-trajectory position RMSE in that run. The GNN did not beat it. There are no recovered equations.
-
-The simulator checks that do exist are unit tests against closed-form updates, including:
-
-- free motion and the semi-implicit Euler closed form under constant acceleration
-- `F = 4 m1 m2 / r^3` for `m = (2, 3)` and `r = 2`, which has magnitude 3
-- one semi-implicit step of that law from rest
-- drag, springs, and gravity-plus-drag superposition
-- elastic, partially elastic, and inelastic collisions
-- momentum conservation under the pairwise law
-- identical trajectories from identical seeds
-
-The latest local run was **86 passed in 9.68s** (Python 3.12.4, NumPy 2.5.3, PyTorch 2.14.0, pytest 9.1.1) on an Apple M1. Seventy of those tests are the Milestone 1 suite.
-
-## Benchmarks
-
-`make evaluate` runs the development benchmark and writes `results/benchmarks/development/`. The measured table is copied in [docs/milestone-2.md](docs/milestone-2.md). Re-running without `--retrain` reuses checkpoints.
+Detailed reports live in `docs/`. Existing results are retained rather than overwritten so preliminary and accepted evidence remain distinguishable.
 
 ## Installation
 
-The project lives on the external drive. The virtual environment is created inside the repository. This volume is ExFAT, which does not support symlinks, so the environment is built with copies.
+Python 3.11+ and Node 20+ are recommended.
 
 ```bash
 cd "/Volumes/T7 Shield/KYNOVAR"
 export COPYFILE_DISABLE=1
 make setup
-make test
+make setup-web
 ```
 
-`make setup` creates `.venv` with `python3 -m venv --copies`, removes AppleDouble sidecar files, and installs the package in editable mode.
+The project drive is ExFAT, so `make setup` creates the virtual environment with copies instead of symlinks.
 
-Dependencies: NumPy, PyYAML, PyTorch, Matplotlib, and pytest. Device selection prefers MPS, then CUDA, then CPU. This machine used MPS.
+## Verify the application
 
-Copy `.env.example` to `.env` only if you need to override paths. Empty values use directories under the repository. Startup rejects project paths outside the repository unless `KYNOVAR_DATA_ROOT` is set, and it points `HF_HOME`, `TORCH_HOME`, and `XDG_CACHE_HOME` at `<repo>/.cache` for the process.
-
-## Generate worlds
+Run the cheap structural acceptance first:
 
 ```bash
-.venv/bin/python scripts/simulate_world.py \
-  --seed 4 \
-  --difficulty 2 \
-  --duration 1.0 \
-  --dt 0.01 \
-  --output results/demo/observations.json
+make smoke
 ```
 
-Add `--write-ground-truth results/evaluation/ground_truth.json` when an evaluation file is required. The two paths must differ.
+This runs the Python/API tests, TypeScript typecheck, and Next.js production build and writes `results/acceptance/smoke.json`.
 
-## Train dynamics model
+Run the full scientific acceptance **uncontended**:
 
 ```bash
-export COPYFILE_DISABLE=1
-.venv/bin/python scripts/train_dynamics.py --config configs/experiments/development.yaml --model gnn
+make acceptance
 ```
 
-`make train` runs that GNN command. Dataset generation, the other baselines, rollout evaluation, and OOD evaluation are documented in [docs/milestone-2.md](docs/milestone-2.md).
+The full profile additionally executes the stable-v1 dynamics benchmark and OOD suite, final M3 law-recovery run, M4 theory competition, clean M5 strategy comparison, M6 falsification, and M7 revision on a fresh seed range. It stops at the first failed stage and writes `results/acceptance/full.json` with the git commit, runtime, command, artifacts, and PASS/FAIL state.
 
-## Run discovery
+A successful process exit alone does not make a scientific result strong; inspect each milestone's measured metrics and report before making a research claim.
 
-Not implemented. `make discover` exits with an error.
-
-## Run evaluation
-
-Hidden laws can still be exported with `kynovar.evaluation.ground_truth.ground_truth_record` or `--write-ground-truth`. Dynamics benchmarks are a different evaluation: `make evaluate` compares predictors on observable trajectories and does not score equation recovery.
-
-## Web interface
-
-Not implemented. `make web` exits with an error.
-
-## Reproducing results
-
-Tests:
+## Common commands
 
 ```bash
-export COPYFILE_DISABLE=1
-make test
+make test       # Python + API tests
+make evaluate   # stable-v1 dynamics benchmark
+make ood        # stable-v1 OOD evaluation
+make discover   # M3 law recovery
+make plan       # M5 active-experiment comparison
+make falsify    # M6 challenger evaluation
+make revise     # M7 change/revision evaluation
+make backend    # FastAPI on :8000
+make web        # Next.js development server on :3000
+make web-build  # TypeScript + production Next.js build
 ```
 
-A seeded universe is fully determined by the seed, the difficulty, `configs/simulator/power_law.yaml`, and the NumPy PCG64 stream. Seed 0 at difficulty 2 currently samples `k = 6.551136029553816` and `p = 1.4442534981735462`. A unit test locks those values.
+### Interactive laboratory
 
-`scripts/simulate_world.py` attaches a run record to each file: project version, git commit when one exists, timestamp, Python, NumPy, platform, and machine. The universe seed is written only in the evaluation file.
+Terminal 1:
 
-## Paper
+```bash
+make backend
+```
 
-Not started. The `paper/` directory is a placeholder path for a later scaffold.
+Terminal 2:
 
-## Limitations
+```bash
+make web
+```
 
-- The simulator is 2D. A 3D request raises an error.
-- The only integrator is semi-implicit Euler. Constant acceleration is not exact in continuous time; the local tests check the discrete closed form and the known `O(dt)` gap.
-- Pairwise forces use `r_eff = max(r, softening)` with `softening = 1e-8`. Separations below that threshold do not match the written formula. Coincident bodies contribute no force.
-- Sampling intervals are half-open on the right, matching NumPy's `Generator.uniform`.
-- Universe difficulties 3–8 raise `UnsupportedDifficulty`. Drag, springs, gravity, and collisions can be constructed directly in tests. The generator does not randomize them.
-- Collision resolution visits pairs in index order. The result is deterministic and can depend on that order when several pairs overlap.
-- Reported acceleration is the continuous-force acceleration. A collision shows up as a velocity jump.
-- Space has no walls.
-- The observation boundary is an API contract. A Python caller who already holds a `World` can call `internal_state()`. Discovery code must not do that. The public id is a short hash of the seed, so a caller who brute-forces small seeds and reruns the generator could recover the law. The laboratory return value does not include the seed.
-- ExFAT creates `._*` AppleDouble files. `make setup` deletes them inside `.venv`. Set `COPYFILE_DISABLE=1` in the shell used for development.
-- Dynamics models see only `World.observe()`. The development test split has two universes, and stiff forces eject many bodies, so full-trajectory RMSE is a noisy summary. See [docs/milestone-2.md](docs/milestone-2.md).
-- No symbolic regression, uncertainty estimates, experiment planner, falsifier, backend, or frontend are implemented.
+The interface supports hidden-universe creation, live autonomous discovery, 3D trajectories, theory exploration, user-designed challenges, adversarial experiment design, reveal/evaluation, and the scientific notebook. Backend discovery events stream over WebSocket.
+
+## Research safeguards
+
+- Discovery receives observations and experiment controls, not hidden force parameters.
+- Dataset splits are assigned by universe, with disjointness checks.
+- Hypothesis scores are predictive scores, **not probabilities**.
+- A hypothesis can be supported, challenged, contradicted, superseded, rejected, or archived; Kynovar does not label a theory “proven.”
+- Counterexample tests are prequential: predictions and intervals are recorded before the challenge result is revealed.
+- M7 replacement validation uses total predictive uncertainty on fresh validation evidence rather than treating fitted absolute and relative noise components as independently identifiable quantities.
+- Ground-truth comparisons are evaluation-only.
+
+## Repository layout
+
+```text
+kynovar/simulator/       2D/3D simulation, forces, integration, universes
+kynovar/laboratory/      sealed experiment interface
+kynovar/data/            generation, stable regimes, splits, normalization, OOD
+kynovar/models/          baselines, MLP/GRU/GNN/interaction GNN training
+kynovar/discovery/       evidence extraction, symbolic search, law discovery
+kynovar/uncertainty/     parametric uncertainty and predictive intervals
+kynovar/theory/          hypotheses, manager, notebook, revision loop
+kynovar/planning/        experiment design and acquisition strategies
+kynovar/falsification/   challenger and counterexample storage
+kynovar/evaluation/      benchmarks, law recovery, reports and plots
+backend/kynovar_api/     FastAPI + WebSocket interactive API
+frontend/                Next.js 14 + React Three Fiber laboratory
+scripts/                 reproducible experiment and acceptance entry points
+tests/                   simulator, leakage, discovery, theory, backend, 3D tests
+results/                 measured research and browser evidence
+```
+
+## Current limitations
+
+Kynovar is a research prototype, not a general-purpose physics engine. The interactive preset family is intentionally constrained, scientific acceptance currently focuses on simulated worlds, the API keeps session state in process memory, discovery work runs in the API process, and browser evidence is not a substitute for broad responsive/device testing. Nested model families can also be difficult to distinguish when a richer law collapses toward a simpler one.
+
+## Documentation
+
+- `docs/milestone-1.md` — simulator and information boundary
+- `docs/milestone-2.md` and `docs/milestone-2-stabilization.md` — dynamics and stable-v1
+- `docs/milestone-4-scientific-reasoning.md` — hypotheses and uncertainty
+- `docs/milestone-6-falsification.md` — counterexample search
+- `docs/milestone-7-theory-revision.md` — change detection and revision
+- `docs/milestone-8-interactive-lab.md` — 3D/API/frontend evidence
+
+## License
+
+MIT. See `LICENSE`.
