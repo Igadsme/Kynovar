@@ -218,7 +218,24 @@ class RevisionLoop:
             old_verdict = judge(self.current.model, {n: evidence.data[n] for n in self.current.model.law.variables}, evidence.target)
             validation.append({"experiment": len(self.evidence) - 1, "new": new_verdict[0], "new_inside": new_verdict[1], "old": old_verdict[0], "old_inside": old_verdict[1]})
         reference = self.reference_noise
-        sharp = candidate.model.relative_sigma <= 2 * max(reference[1], 0.01) and candidate.model.absolute_sigma <= 2 * max(reference[0], 1e-3)
+        # Compare total predictive noise on the fresh validation evidence rather
+        # than requiring the fitted absolute/relative components to match
+        # independently. Those components are not separately identifiable when
+        # the force scale is narrow, while their quadrature is the uncertainty
+        # that actually enters predictions and verdicts.
+        validation_evidence = [self.evidence[v["experiment"]] for v in validation]
+        validation_evidence = [part for part in validation_evidence if part is not None]
+        if validation_evidence:
+            fresh = merge_evidence(validation_evidence)
+            data = {name: fresh.data[name] for name in candidate.model.law.variables}
+            mean = candidate.model.law.predict(data)
+            candidate_sigma = np.sqrt(candidate.model.absolute_sigma**2 + (candidate.model.relative_sigma * mean) ** 2)
+            reference_sigma = np.sqrt(reference[0] ** 2 + (reference[1] * mean) ** 2)
+            sharpness_ratio = float(np.median(candidate_sigma / np.maximum(reference_sigma, 1e-12)))
+            sharp = bool(np.isfinite(sharpness_ratio) and sharpness_ratio <= 2.0)
+        else:
+            sharpness_ratio = float("inf")
+            sharp = False
         validated = bool(validation) and sharp and all(v["new"] == "supports" for v in validation) and any(v["old"] == "contradicts" for v in validation)
         outcome = {
             "alarm_index": alarm_index,
@@ -227,6 +244,8 @@ class RevisionLoop:
             "validation": validation,
             "candidate_noise": [candidate.model.absolute_sigma, candidate.model.relative_sigma],
             "reference_noise": list(reference),
+            "sharpness_metric": "median candidate total noise / reference total noise on fresh validation evidence",
+            "sharpness_ratio": sharpness_ratio,
             "sharp": bool(sharp),
             "validated": validated,
         }
