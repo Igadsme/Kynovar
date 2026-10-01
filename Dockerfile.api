@@ -1,0 +1,29 @@
+FROM python:3.12-slim AS runtime
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    KYNOVAR_ROOT=/app \
+    KYNOVAR_DATA_ROOT=/var/lib/kynovar \
+    KYNOVAR_DATA=/var/lib/kynovar/datasets \
+    KYNOVAR_CHECKPOINTS=/var/lib/kynovar/checkpoints \
+    KYNOVAR_RESULTS=/var/lib/kynovar/results \
+    KYNOVAR_LOGS=/var/lib/kynovar/logs
+
+WORKDIR /app
+COPY pyproject.toml README.md LICENSE ./
+COPY requirements-api.txt ./
+COPY kynovar ./kynovar
+COPY backend ./backend
+COPY configs ./configs
+RUN pip install --no-cache-dir -r requirements-api.txt \
+    && addgroup --system kynovar \
+    && adduser --system --ingroup kynovar kynovar \
+    && chmod -R a+rX /app \
+    && mkdir -p /var/lib/kynovar/datasets /var/lib/kynovar/checkpoints /var/lib/kynovar/results /var/lib/kynovar/logs \
+    && chown -R kynovar:kynovar /var/lib/kynovar
+
+USER kynovar
+EXPOSE 8000
+HEALTHCHECK --interval=20s --timeout=3s --start-period=20s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2)"
+CMD ["python", "-m", "uvicorn", "backend.kynovar_api.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--proxy-headers"]

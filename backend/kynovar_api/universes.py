@@ -9,6 +9,7 @@ reported to humans, never to the session.
 from __future__ import annotations
 
 import hashlib
+import threading
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -62,6 +63,7 @@ def build_laboratory(universe_id: str, k: float, p: float) -> Laboratory3D:
 class Registry:
     def __init__(self) -> None:
         self.universes: dict[str, Universe] = {}
+        self._lock = threading.RLock()
 
     def create(self, preset: str | None = None, seed: int = 0, noise: float = 0.02, budget: int = 16) -> Universe:
         if preset in PRESETS:
@@ -74,11 +76,26 @@ class Registry:
         instrument = Instrument(acceleration_noise=0.002, relative_acceleration_noise=noise, seed=seed)
         session = DiscoverySession(ExperimentClient(laboratory, instrument), DEFAULT_RANGES, budget=budget, seed=seed)
         universe = Universe(universe_id, law["k"], law["p"], instrument, session, laboratory)
-        self.universes[universe_id] = universe
+        with self._lock:
+            previous = self.universes.get(universe_id)
+            if previous is not None:
+                previous.session.stop()
+            self.universes[universe_id] = universe
         return universe
 
     def get(self, universe_id: str) -> Universe:
-        return self.universes[universe_id]
+        with self._lock:
+            return self.universes[universe_id]
+
+    def list_public(self) -> list[dict]:
+        with self._lock:
+            return [universe.public() for universe in self.universes.values()]
+
+    def close(self) -> None:
+        with self._lock:
+            universes = list(self.universes.values())
+        for universe in universes:
+            universe.session.stop()
 
 
 def evaluate(universe: Universe) -> dict:

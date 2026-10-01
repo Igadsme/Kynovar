@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Equation } from "@/components/Equation";
 import type { Track } from "@/components/Scene";
-import { api, WS, type Design, type Experiment, type Hypothesis, type NotebookEvent, type Prediction, type Reveal, type Summary, type TheoryState, type Vec3 } from "@/lib/api";
+import { api, websocketUrl, type Design, type Experiment, type Hypothesis, type NotebookEvent, type Prediction, type Reveal, type Summary, type TheoryState, type Vec3 } from "@/lib/api";
 
 const Scene = dynamic(() => import("@/components/Scene").then((m) => m.Scene), { ssr: false });
 
@@ -106,13 +106,29 @@ function Lab({ initial }: { initial: Summary | null }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [connected, setConnected] = useState(false);
+  const seenNotes = useRef<Set<number>>(new Set());
+  const seenExperiments = useRef<Set<string>>(new Set());
 
   const refresh = useCallback(async () => {
     try {
       const [s, t] = await Promise.all([api.status(UNIVERSE), api.theories(UNIVERSE)]);
       setSummary(s);
       setTheory(t);
+      setError(null);
     } catch (e) {
+      // Universes are intentionally in-memory. Recover cleanly when the API
+      // container restarts while this browser tab remains open.
+      if (String(e).includes("404:")) {
+        const world = await api.createWorld(UNIVERSE, 16);
+        setSummary(world);
+        setTheory(null);
+        setExperiments([]);
+        setNotebook([]);
+        seenNotes.current.clear();
+        seenExperiments.current.clear();
+        setError(null);
+        return;
+      }
       setError(String(e));
     }
   }, []);
@@ -120,28 +136,41 @@ function Lab({ initial }: { initial: Summary | null }) {
   useEffect(() => {
     let socket: WebSocket | null = null;
     let closed = false;
+    let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+    let pollTimer: ReturnType<typeof setInterval> | null = null;
     (async () => {
+      await refresh();
       const [exps, notes] = await Promise.all([api.experiments(UNIVERSE), api.notebook(UNIVERSE)]);
       setExperiments(exps);
       setNotebook(notes);
-      await refresh();
       if (closed) return;
-      socket = new WebSocket(`${WS}/ws/${UNIVERSE}`);
-      const seenNotes = new Set(notes.map((n) => n.index));
-      const seenExperiments = new Set(exps.map((e) => e.id));
-      socket.onopen = () => setConnected(true);
-      socket.onclose = () => setConnected(false);
-      socket.onmessage = (message) => {
-        const event = JSON.parse(message.data) as { type: string; payload: any };
+      seenNotes.current = new Set(notes.map((n) => n.index));
+      seenExperiments.current = new Set(exps.map((e) => e.id));
+      const openSocket = () => {
+        if (closed) return;
+        socket = new WebSocket(websocketUrl(UNIVERSE));
+        socket.onopen = () => setConnected(true);
+        socket.onerror = () => socket?.close();
+        socket.onclose = () => {
+          setConnected(false);
+          if (!closed) reconnectTimer = setTimeout(openSocket, 2000);
+        };
+        socket.onmessage = (message) => {
+          let event: { type: string; payload: any };
+          try {
+            event = JSON.parse(message.data) as { type: string; payload: any };
+          } catch {
+            return;
+          }
         if (event.type === "notebook") {
           const note = event.payload as NotebookEvent;
-          if (seenNotes.has(note.index)) return;
-          seenNotes.add(note.index);
+          if (seenNotes.current.has(note.index)) return;
+          seenNotes.current.add(note.index);
           setNotebook((prev) => [...prev, note]);
         } else if (event.type === "experiment") {
           const experiment = event.payload as Experiment;
-          if (seenExperiments.has(experiment.id)) return;
-          seenExperiments.add(experiment.id);
+          if (seenExperiments.current.has(experiment.id)) return;
+          seenExperiments.current.add(experiment.id);
           setExperiments((prev) => [...prev, experiment]);
           api.status(UNIVERSE).then(setSummary).catch(() => undefined);
         } else if (event.type === "theory") {
@@ -151,10 +180,16 @@ function Lab({ initial }: { initial: Summary | null }) {
           setSummary((prev) => (prev ? { ...prev, status: event.payload.status } : prev));
           if (event.payload.error) setError(`Discovery loop error: ${event.payload.error}`);
         }
+        };
       };
+      openSocket();
+      // Polling keeps state correct through proxies that do not support WebSockets.
+      pollTimer = setInterval(() => refresh(), 3000);
     })().catch((e) => setError(String(e)));
     return () => {
       closed = true;
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      if (pollTimer) clearInterval(pollTimer);
       socket?.close();
     };
   }, [refresh]);

@@ -1,4 +1,4 @@
-.PHONY: setup test generate train evaluate ood discover plan falsify revise backend web web-build acceptance smoke
+.PHONY: setup setup-web test verify generate train evaluate ood discover plan falsify revise backend frontend web web-build dev acceptance smoke
 
 PYTHON ?= .venv/bin/python
 PIP ?= .venv/bin/pip
@@ -19,6 +19,9 @@ setup-web:
 
 test:
 	$(PYTHON) -m pytest
+
+verify: test
+	cd frontend && $(NPM) run typecheck && $(NPM) run build
 
 generate:
 	$(PYTHON) scripts/generate_dataset.py --config configs/experiments/development.yaml
@@ -47,11 +50,17 @@ revise:
 backend:
 	$(PYTHON) -m uvicorn backend.kynovar_api.app:app --host 127.0.0.1 --port 8000
 
+frontend:
+	cd frontend && $(NPM) run build && PORT=3000 HOSTNAME=127.0.0.1 KYNOVAR_API_INTERNAL=http://127.0.0.1:8000 $(NPM) run start
+
 web:
 	cd frontend && $(NPM) run dev
 
 web-build:
 	cd frontend && $(NPM) run typecheck && $(NPM) run build
+
+dev:
+	@trap 'kill 0' INT TERM EXIT; $(PYTHON) -m uvicorn backend.kynovar_api.app:app --host 127.0.0.1 --port 8000 & cd frontend && KYNOVAR_API_INTERNAL=http://127.0.0.1:8000 $(NPM) run dev
 
 smoke:
 	$(PYTHON) scripts/acceptance.py --profile smoke

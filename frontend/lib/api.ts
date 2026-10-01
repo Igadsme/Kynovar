@@ -1,5 +1,15 @@
-export const API = process.env.NEXT_PUBLIC_KYNOVAR_API ?? "http://127.0.0.1:8000";
-export const WS = API.replace(/^http/, "ws");
+export const API = (process.env.NEXT_PUBLIC_KYNOVAR_API ?? "/api").replace(/\/$/, "");
+
+export function websocketUrl(universeId: string): string {
+  const explicit = process.env.NEXT_PUBLIC_KYNOVAR_WS;
+  const base = explicit
+    ? new URL(explicit, window.location.origin)
+    : new URL(API, window.location.origin);
+  if (!explicit) base.pathname = `${base.pathname.replace(/\/$/, "")}/ws`;
+  base.protocol = base.protocol === "https:" ? "wss:" : "ws:";
+  base.pathname = `${base.pathname.replace(/\/$/, "")}/${encodeURIComponent(universeId)}`;
+  return base.toString();
+}
 
 export type Vec3 = [number, number, number];
 

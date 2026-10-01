@@ -161,7 +161,17 @@ class Challenger:
                     best[criterion] = (design, value)
         return best
 
-    def challenge(self, client: ExperimentClient, manager, leader, design: ExperimentDesign, criterion: str, score: float, store: CounterexampleStore) -> tuple[Challenge, Evidence | None]:
+    def challenge(
+        self,
+        client: ExperimentClient,
+        manager,
+        leader,
+        design: ExperimentDesign,
+        criterion: str,
+        score: float,
+        store: CounterexampleStore,
+        challenge_id: str | None = None,
+    ) -> tuple[Challenge, Evidence | None]:
         """Predict, run, compare, update the theory, and keep any counterexample.
 
         The prediction and interval are recorded before the experiment runs.
@@ -171,7 +181,7 @@ class Challenger:
         data = {name: path["data"][name] for name in leader.variables}
         mean, low, high = leader.model.interval(data)
         record = Challenge(
-            challenge_id=f"C-{uuid.uuid4().hex[:8]}",
+            challenge_id=challenge_id or f"C-{uuid.uuid4().hex[:8]}",
             criterion=criterion,
             target=leader.id,
             design=design.to_dict(),

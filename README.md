@@ -4,7 +4,7 @@ Autonomous discovery and revision of physical laws in unknown simulated universe
 
 Kynovar is an experimental research system that observes sealed dynamical systems, learns trajectory dynamics, proposes symbolic laws, manages competing hypotheses with uncertainty, selects experiments, searches for counterexamples, detects silent changes in the governing physics, revises theories, and exposes the process through an interactive 3D laboratory.
 
-> **Evidence status:** M1 is accepted. M2-M8 are implemented. Historical M4/M6/M7 and browser evidence are preserved under `results/`; the repository now includes a sequential acceptance runner for fresh, uncontended validation. Do not interpret implementation or a historical artifact as a fresh PASS unless `results/acceptance/full.json` records it for the current commit.
+> **Evidence status:** M1 is accepted. M2-M8 are implemented. Historical M4/M6/M7 and browser evidence are preserved under `results/`; the repository includes a sequential acceptance runner for fresh, uncontended validation. Do not interpret implementation or a historical artifact as a fresh PASS unless `results/acceptance/full.json` records it for the current commit.
 
 ## System
 
@@ -40,7 +40,7 @@ Detailed reports live in `docs/`. Existing results are retained rather than over
 
 ## Installation
 
-Python 3.11+ and Node 20+ are recommended.
+Python 3.11+ and Node 22+ are recommended.
 
 ```bash
 cd "/Volumes/T7 Shield/KYNOVAR"
@@ -71,10 +71,13 @@ The full profile additionally executes the stable-v1 dynamics benchmark and OOD 
 
 A successful process exit alone does not make a scientific result strong; inspect each milestone's measured metrics and report before making a research claim.
 
+The current automated suite contains 125 passing tests across simulation, discovery, theory management, leakage boundaries, the API, and reproducibility.
+
 ## Common commands
 
 ```bash
 make test       # Python + API tests
+make verify     # Python tests + frontend typecheck/build
 make evaluate   # stable-v1 dynamics benchmark
 make ood        # stable-v1 OOD evaluation
 make discover   # M3 law recovery
@@ -84,23 +87,33 @@ make revise     # M7 change/revision evaluation
 make backend    # FastAPI on :8000
 make web        # Next.js development server on :3000
 make web-build  # TypeScript + production Next.js build
+make dev        # backend and frontend together
 ```
 
-### Interactive laboratory
+## Interactive laboratory
 
-Terminal 1:
+For local development, run both services with:
 
 ```bash
-make backend
+make dev
 ```
 
-Terminal 2:
+Then open `http://localhost:3000`. You can also run `make backend` and `make web` in separate terminals. The browser uses the same-origin `/api` proxy by default; set `NEXT_PUBLIC_KYNOVAR_API` and optionally `NEXT_PUBLIC_KYNOVAR_WS` only when serving the API from a different public origin. Configure cross-origin API clients with the comma-separated `KYNOVAR_CORS_ORIGINS` environment variable.
+
+The interface supports hidden-universe creation, live autonomous discovery, 3D trajectories, theory exploration, user-designed challenges, adversarial experiment design, reveal/evaluation, and the scientific notebook. Backend discovery events stream over WebSocket, with polling fallback when a proxy does not support WebSockets.
+
+## Deployment
+
+Docker Compose provides a reproducible single-origin deployment with WebSocket proxying, health checks, persistent artifact storage, non-root application processes, and restart policies:
 
 ```bash
-make web
+export COPYFILE_DISABLE=1
+docker compose up --build -d
 ```
 
-The interface supports hidden-universe creation, live autonomous discovery, 3D trajectories, theory exploration, user-designed challenges, adversarial experiment design, reveal/evaluation, and the scientific notebook. Backend discovery events stream over WebSocket.
+Open `http://localhost:8080`. Set `KYNOVAR_PORT` to publish a different host port. Terminate TLS at your load balancer or ingress and forward HTTP/WebSocket traffic to the gateway on port 8080.
+
+The API image uses `requirements-api.txt`, which excludes training-only dependencies such as PyTorch. Run one API worker: discovery sessions currently live in process memory and are intentionally not shared between workers. The browser recreates its interactive world cleanly if the API process restarts.
 
 ## Research safeguards
 
@@ -126,7 +139,7 @@ kynovar/planning/        experiment design and acquisition strategies
 kynovar/falsification/   challenger and counterexample storage
 kynovar/evaluation/      benchmarks, law recovery, reports and plots
 backend/kynovar_api/     FastAPI + WebSocket interactive API
-frontend/                Next.js 14 + React Three Fiber laboratory
+frontend/                Next.js 15 + React Three Fiber laboratory
 scripts/                 reproducible experiment and acceptance entry points
 tests/                   simulator, leakage, discovery, theory, backend, 3D tests
 results/                 measured research and browser evidence

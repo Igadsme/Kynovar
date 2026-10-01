@@ -36,6 +36,10 @@ def test_world_lifecycle_and_hidden_keys(client) -> None:
     assert client.get("/worlds/K-0042/experiments").json()[0]["id"] == "E-0001"
     bad = dict(_design(), positions=[[0, 0], [1, 1]])
     assert client.post("/worlds/K-0042/experiments", json=bad).status_code == 422
+    too_small_dt = dict(_design(), dt=0.000001)
+    assert client.post("/worlds/K-0042/experiments", json=too_small_dt).status_code == 422
+    out_of_range = dict(_design(), velocities=[[101, 0, 0], [0, 0, 0]])
+    assert client.post("/worlds/K-0042/experiments", json=out_of_range).status_code == 422
     assert client.get("/worlds/NOPE").status_code == 404
 
 
@@ -52,9 +56,14 @@ def test_discovery_challenge_and_metrics(client) -> None:
     assert prediction["predicted_positions"] and prediction["challenge_id"].startswith("C-")
     outcome = client.post(f"/worlds/K-DEMO/challenge/{prediction['challenge_id']}/reveal").json()
     assert outcome["challenge"]["outcome"]["usable"] in (True, False)
+    assert outcome["challenge"]["challenge_id"] == prediction["challenge_id"]
     assert client.post(f"/worlds/K-DEMO/challenge/{prediction['challenge_id']}/reveal").status_code == 404
     adversarial = client.post("/worlds/K-DEMO/challenge", json={"criterion": "extrapolation"})
     assert adversarial.status_code == 200 and adversarial.json()["criterion"] in ("extrapolation", "uncertainty", "disagreement", "weakly_observed")
+    adversarial_prediction = adversarial.json()
+    adversarial_outcome = client.post(f"/worlds/K-DEMO/challenge/{adversarial_prediction['challenge_id']}/reveal").json()
+    assert adversarial_outcome["challenge"]["challenge_id"] == adversarial_prediction["challenge_id"]
+    assert adversarial_outcome["challenge"]["criterion_score"] == pytest.approx(adversarial_prediction["criterion_score"])
     metrics = client.get("/worlds/K-DEMO/metrics").json()
     evaluation = metrics["evaluation"]
     assert evaluation["available"] and evaluation["label"].startswith("EVALUATION ONLY")

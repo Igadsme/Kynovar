@@ -1,0 +1,10 @@
+# Runtime-only dependencies for the interactive API container.
+# Training and benchmark dependencies (such as PyTorch) are intentionally
+# excluded to keep the deployable demo image small and CPU-friendly.
+fastapi>=0.110,<1
+numpy>=1.26,<3
+PyYAML>=6,<7
+scipy>=1.11,<2
+sympy>=1.12,<2
+uvicorn[standard]>=0.29,<1
+websockets>=12,<17

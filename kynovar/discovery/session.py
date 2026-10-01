@@ -183,7 +183,7 @@ class DiscoverySession:
         return len({r["hypothesis"] for r in recent}) == 1 and all(r["status"] == Status.SUPPORTED.value for r in recent)
 
     # Challenge ------------------------------------------------------------------------
-    def predict(self, design: ExperimentDesign, criterion: str = "user") -> dict:
+    def predict(self, design: ExperimentDesign, criterion: str = "user", criterion_score: float = 0.0) -> dict:
         with self.lock:
             leader = self.manager.leader()
             if leader is None:
@@ -194,7 +194,13 @@ class DiscoverySession:
             data = {n: path["data"][n] for n in leader.variables}
             mean, low, high = leader.model.interval(data)
             challenge_id = f"C-{uuid.uuid4().hex[:8]}"
-            self.pending[challenge_id] = {"design": design, "leader": leader.id, "criterion": criterion, "predicted_positions": path["positions"]}
+            self.pending[challenge_id] = {
+                "design": design,
+                "leader": leader.id,
+                "criterion": criterion,
+                "criterion_score": float(criterion_score),
+                "predicted_positions": path["positions"],
+            }
             return {
                 "challenge_id": challenge_id,
                 "hypothesis": leader.id,
@@ -202,6 +208,7 @@ class DiscoverySession:
                 "latex": leader.latex,
                 "design": design.to_dict(),
                 "criterion": criterion,
+                "criterion_score": float(criterion_score),
                 "frame_stride": 2,
                 "predicted_positions": _round(path["positions"]),
                 "predicted_force": {"mean": _round(mean), "low95": _round(low), "high95": _round(high)},
@@ -230,7 +237,16 @@ class DiscoverySession:
                 raise KeyError(challenge_id)
             leader = self.manager.hypotheses[pending["leader"]]
             before = len(self.store.items)
-            record, evidence = self.challenger.challenge(self.client, self.manager, leader, pending["design"], pending["criterion"], 0.0, self.store)
+            record, evidence = self.challenger.challenge(
+                self.client,
+                self.manager,
+                leader,
+                pending["design"],
+                pending["criterion"],
+                pending["criterion_score"],
+                self.store,
+                challenge_id=challenge_id,
+            )
             # The challenge always runs through the client, even when the outcome is
             # unusable for testing; mirror it in the experiment log.
             states = self.client_last_states()

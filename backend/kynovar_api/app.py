@@ -6,6 +6,9 @@ Run:  .venv/bin/uvicorn backend.kynovar_api.app:app --port 8000
 from __future__ import annotations
 
 import asyncio
+import math
+import os
+from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,9 +17,24 @@ from pydantic import BaseModel, Field
 from backend.kynovar_api.universes import Registry, evaluate
 from kynovar.discovery.lab import ExperimentDesign
 
-app = FastAPI(title="Kynovar Laboratory API", version="0.8.0")
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"], allow_methods=["*"], allow_headers=["*"])
 registry = Registry()
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    yield
+    registry.close()
+
+
+def _cors_origins() -> list[str]:
+    configured = os.environ.get("KYNOVAR_CORS_ORIGINS", "")
+    if configured.strip():
+        return [origin.strip().rstrip("/") for origin in configured.split(",") if origin.strip()]
+    return ["http://localhost:3000", "http://127.0.0.1:3000"]
+
+
+app = FastAPI(title="Kynovar Laboratory API", version="0.8.0", lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=_cors_origins(), allow_methods=["*"], allow_headers=["*"])
 
 
 class WorldRequest(BaseModel):
@@ -31,12 +49,17 @@ class DesignRequest(BaseModel):
     positions: list[list[float]] = Field(min_length=2, max_length=2)
     velocities: list[list[float]] = Field(min_length=2, max_length=2)
     duration: float = Field(1.0, gt=0.0, le=4.0)
-    dt: float = 0.01
+    dt: float = Field(0.01, ge=0.001, le=0.1)
 
     def design(self) -> ExperimentDesign:
+        scalars = [*self.masses, self.duration, self.dt, *(value for vector in self.positions + self.velocities for value in vector)]
+        if not all(math.isfinite(value) for value in scalars):
+            raise HTTPException(422, "experiment values must be finite")
         for vector in self.positions + self.velocities:
             if len(vector) != 3:
                 raise HTTPException(422, "positions and velocities must be 3D vectors")
+        if any(abs(value) > 100 for vector in self.positions + self.velocities for value in vector):
+            raise HTTPException(422, "position and velocity components must be in [-100, 100]")
         if any(m <= 0 or m > 10 for m in self.masses):
             raise HTTPException(422, "masses must be in (0, 10]")
         steps = self.duration / self.dt
@@ -69,7 +92,7 @@ def create_world(request: WorldRequest) -> dict:
 
 @app.get("/worlds")
 def list_worlds() -> list[dict]:
-    return [u.public() for u in registry.universes.values()]
+    return registry.list_public()
 
 
 @app.get("/worlds/{universe_id}")
@@ -118,9 +141,7 @@ def challenge(universe_id: str, request: ChallengeRequest) -> dict:
         if request.design is not None:
             return session.predict(request.design.design(), "user")
         design, criterion, score = session.adversarial_design(request.criterion)
-        prediction = session.predict(design, criterion)
-        prediction["criterion_score"] = score
-        return prediction
+        return session.predict(design, criterion, score)
     except ValueError as error:
         raise HTTPException(409, str(error)) from error
 
@@ -153,12 +174,23 @@ async def stream(websocket: WebSocket, universe_id: str) -> None:
         await websocket.close(code=4404)
         return
     cursor = 0
-    try:
+    async def wait_for_disconnect() -> None:
         while True:
+            message = await websocket.receive()
+            if message["type"] == "websocket.disconnect":
+                return
+
+    disconnect = asyncio.create_task(wait_for_disconnect())
+    try:
+        while not disconnect.done():
             events = session.events_since(cursor)
             for event in events:
                 await websocket.send_json(event)
             cursor += len(events)
             await asyncio.sleep(0.2)
-    except WebSocketDisconnect:
+    except (WebSocketDisconnect, RuntimeError):
         return
+    finally:
+        disconnect.cancel()
+        with suppress(asyncio.CancelledError, WebSocketDisconnect):
+            await disconnect

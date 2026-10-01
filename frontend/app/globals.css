@@ -96,3 +96,22 @@ select { background: var(--panel); border: 1px solid var(--line); color: var(--t
 .verdict.inconclusive { border-color: #6b5226; color: var(--warn); }
 .eval-banner { font-family: var(--mono); font-size: 11px; color: var(--warn); border: 1px dashed #6b5226; padding: 8px 10px; margin-bottom: 12px; letter-spacing: 0.04em; }
 .error { color: var(--bad); font-family: var(--mono); font-size: 11px; margin-top: 8px; white-space: pre-wrap; }
+
+@media (max-width: 900px) {
+  .lab { height: auto; min-height: 100vh; }
+  .body { grid-template-columns: 1fr; grid-template-rows: minmax(360px, 52vh) auto; }
+  .viewport { border-right: 0; border-bottom: 1px solid var(--line); }
+  .side { overflow: visible; }
+  .topbar .stat { display: none; }
+  .tabs { margin-left: 12px; }
+}
+
+@media (max-width: 560px) {
+  .wordmark { font-size: 30px; }
+  .tagline { font-size: 10px; }
+  .readout { gap: 8px 18px; font-size: 11px; }
+  .topbar { gap: 6px; }
+  .topbar .brand { display: none; }
+  .tab { padding: 6px 8px; font-size: 10px; }
+  .form-grid { grid-template-columns: 52px repeat(3, minmax(0, 1fr)); }
+}
