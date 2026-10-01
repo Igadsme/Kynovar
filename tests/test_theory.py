@@ -128,3 +128,13 @@ def test_notebook_text_is_rendered_from_payload() -> None:
     assert seen == [event]
     broken = notebook.record("hypothesis_updated", hypothesis_id="H-2")
     assert broken.text.startswith("hypothesis_updated:")
+
+
+def test_total_predictive_noise_combines_absolute_and_relative_components() -> None:
+    evidence = _evidence(seed=31)
+    law = ParametricLaw.from_expression(parse_expression("1.0*m1*m2*r**(-1.0)", VARS), VARS)
+    model = fit_uncertain(law, evidence.data, evidence.target, evidence.groups, bootstrap=0)
+    mean, std = model.predict(evidence.data)
+    expected = np.sqrt(model.absolute_sigma**2 + (model.relative_sigma * mean) ** 2)
+    assert np.allclose(std, expected)
+    assert np.isfinite(std).all() and np.all(std >= 0)
