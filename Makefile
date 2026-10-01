@@ -1,11 +1,9 @@
-.PHONY: setup test generate train discover evaluate web
+.PHONY: setup test generate train evaluate ood discover plan falsify revise backend web web-build acceptance smoke
 
 PYTHON ?= .venv/bin/python
 PIP ?= .venv/bin/pip
+NPM ?= npm
 
-# ExFAT does not support symlinks and macOS writes AppleDouble sidecar files.
-# --copies keeps the virtualenv on the project drive. editable_mode=compat
-# installs a .pth file instead of a symlink into site-packages.
 export COPYFILE_DISABLE := 1
 
 setup:
@@ -13,8 +11,11 @@ setup:
 	find .venv -name '._*' -delete
 	$(PYTHON) -m pip install --upgrade pip
 	find .venv -name '._*' -delete
-	$(PYTHON) -m pip install --config-settings editable_mode=compat -e ".[dev]"
+	$(PYTHON) -m pip install --config-settings editable_mode=compat -e ".[dev,web]"
 	find .venv -name '._*' -delete
+
+setup-web:
+	cd frontend && $(NPM) ci
 
 test:
 	$(PYTHON) -m pytest
@@ -26,9 +27,34 @@ train:
 	$(PYTHON) scripts/train_dynamics.py --config configs/experiments/development.yaml --model gnn
 
 evaluate:
-	$(PYTHON) scripts/run_benchmark.py --config configs/experiments/development.yaml
+	$(PYTHON) scripts/run_benchmark.py --config configs/experiments/stable-v1.yaml
 
-discover web:
-	@echo "This target is not implemented yet. Current milestone: 2 (dynamics prediction)." >&2
-	@echo "See docs/milestone-2.md." >&2
-	@exit 1
+ood:
+	$(PYTHON) scripts/run_ood.py --config configs/experiments/stable-v1.yaml
+
+discover:
+	$(PYTHON) scripts/discover_laws.py
+
+plan:
+	$(PYTHON) scripts/active_experiments.py
+
+falsify:
+	$(PYTHON) scripts/falsification.py
+
+revise:
+	$(PYTHON) scripts/theory_shift.py
+
+backend:
+	$(PYTHON) -m uvicorn backend.kynovar_api.app:app --host 127.0.0.1 --port 8000
+
+web:
+	cd frontend && $(NPM) run dev
+
+web-build:
+	cd frontend && $(NPM) run typecheck && $(NPM) run build
+
+smoke:
+	$(PYTHON) scripts/acceptance.py --profile smoke
+
+acceptance:
+	$(PYTHON) scripts/acceptance.py --profile full
