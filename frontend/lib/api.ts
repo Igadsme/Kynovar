@@ -13,7 +13,8 @@ async function getWebsocketBase(): Promise<string> {
 
 export async function websocketUrl(universeId: string): Promise<string> {
   const base = new URL(await getWebsocketBase(), window.location.origin);
-  base.protocol = base.protocol === "https:" ? "wss:" : "ws:";
+  if (base.protocol === "https:") base.protocol = "wss:";
+  if (base.protocol === "http:") base.protocol = "ws:";
   base.pathname = `${base.pathname.replace(/\/$/, "")}/${encodeURIComponent(universeId)}`;
   return base.toString();
 }
