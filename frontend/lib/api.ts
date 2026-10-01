@@ -1,11 +1,18 @@
 export const API = (process.env.NEXT_PUBLIC_KYNOVAR_API ?? "/api").replace(/\/$/, "");
 
-export function websocketUrl(universeId: string): string {
+let runtimeWebsocketBase: Promise<string> | null = null;
+
+async function getWebsocketBase(): Promise<string> {
   const explicit = process.env.NEXT_PUBLIC_KYNOVAR_WS;
-  const base = explicit
-    ? new URL(explicit, window.location.origin)
-    : new URL(API, window.location.origin);
-  if (!explicit) base.pathname = `${base.pathname.replace(/\/$/, "")}/ws`;
+  if (explicit) return explicit;
+  runtimeWebsocketBase ??= request<{ websocket_base: string }>("/runtime")
+    .then((config) => config.websocket_base)
+    .catch(() => `${window.location.origin.replace(/^http/, "ws")}${API}/ws`);
+  return runtimeWebsocketBase;
+}
+
+export async function websocketUrl(universeId: string): Promise<string> {
+  const base = new URL(await getWebsocketBase(), window.location.origin);
   base.protocol = base.protocol === "https:" ? "wss:" : "ws:";
   base.pathname = `${base.pathname.replace(/\/$/, "")}/${encodeURIComponent(universeId)}`;
   return base.toString();

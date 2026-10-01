@@ -31,6 +31,13 @@ function fmt(value: number | null | undefined, digits = 3): string {
   return Math.abs(value) >= 1e4 || (Math.abs(value) < 1e-3 && value !== 0) ? value.toExponential(2) : value.toFixed(digits);
 }
 
+function laboratoryUnavailable(error: unknown): string {
+  if (typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname)) {
+    return `Laboratory backend unreachable (${String(error)}). Start it with: make backend`;
+  }
+  return "Laboratory service temporarily unavailable.";
+}
+
 export default function Page() {
   const [phase, setPhase] = useState<"landing" | "lab">("landing");
   const [summary, setSummary] = useState<Summary | null>(null);
@@ -50,7 +57,7 @@ export default function Page() {
       setOffline(null);
       if (world.status !== "UNINITIALIZED") setPhase("lab");
     } catch (error) {
-      setOffline(`Laboratory backend unreachable (${String(error)}). Start it with: make backend`);
+      setOffline(laboratoryUnavailable(error));
     }
   }, []);
 
@@ -64,7 +71,7 @@ export default function Page() {
       setSummary(await api.start(UNIVERSE));
       setPhase("lab");
     } catch (error) {
-      setOffline(String(error));
+      setOffline(laboratoryUnavailable(error));
     } finally {
       setBusy(false);
     }
@@ -146,14 +153,24 @@ function Lab({ initial }: { initial: Summary | null }) {
       if (closed) return;
       seenNotes.current = new Set(notes.map((n) => n.index));
       seenExperiments.current = new Set(exps.map((e) => e.id));
-      const openSocket = () => {
+      const openSocket = async () => {
         if (closed) return;
-        socket = new WebSocket(websocketUrl(UNIVERSE));
+        try {
+          socket = new WebSocket(await websocketUrl(UNIVERSE));
+        } catch {
+          setConnected(false);
+          if (!closed) reconnectTimer = setTimeout(() => void openSocket(), 2000);
+          return;
+        }
+        if (closed) {
+          socket.close();
+          return;
+        }
         socket.onopen = () => setConnected(true);
         socket.onerror = () => socket?.close();
         socket.onclose = () => {
           setConnected(false);
-          if (!closed) reconnectTimer = setTimeout(openSocket, 2000);
+          if (!closed) reconnectTimer = setTimeout(() => void openSocket(), 2000);
         };
         socket.onmessage = (message) => {
           let event: { type: string; payload: any };
@@ -182,7 +199,7 @@ function Lab({ initial }: { initial: Summary | null }) {
         }
         };
       };
-      openSocket();
+      void openSocket();
       // Polling keeps state correct through proxies that do not support WebSockets.
       pollTimer = setInterval(() => refresh(), 3000);
     })().catch((e) => setError(String(e)));
