@@ -12,6 +12,7 @@ async function proxy(request: Request, context: Context): Promise<Response> {
   headers.delete("host");
   headers.delete("connection");
   headers.delete("content-length");
+  headers.delete("accept-encoding");
 
   const init: RequestInit = {
     method: request.method,
@@ -22,7 +23,17 @@ async function proxy(request: Request, context: Context): Promise<Response> {
   if (!["GET", "HEAD"].includes(request.method)) init.body = await request.arrayBuffer();
 
   try {
-    return await fetch(target, init);
+    const upstream = await fetch(target, init);
+    const responseHeaders = new Headers(upstream.headers);
+    responseHeaders.delete("connection");
+    responseHeaders.delete("content-encoding");
+    responseHeaders.delete("content-length");
+    responseHeaders.delete("transfer-encoding");
+    return new Response(await upstream.arrayBuffer(), {
+      status: upstream.status,
+      statusText: upstream.statusText,
+      headers: responseHeaders,
+    });
   } catch {
     return Response.json({ detail: "Laboratory service temporarily unavailable." }, { status: 502 });
   }
