@@ -43,9 +43,9 @@ def test_evidence(world, ranges: DesignRanges, seed: int, experiments: int = 12)
     return pairwise_evidence(kept, include_velocity=True) if kept else None
 
 
-def run_world(world, seed: int, engine_config: EngineConfig) -> dict:
+def run_world(world, seed: int, engine_config: EngineConfig, pairwise_experiments: int = 24) -> dict:
     client = ExperimentClient(world.laboratory())
-    report = discover(client, ranges=TRAIN, engine_config=engine_config, seed=seed)
+    report = discover(client, ranges=TRAIN, engine_config=engine_config, seed=seed, pairwise_experiments=pairwise_experiments)
     laws = report.pairwise_laws if world.evidence == "pairwise" else report.single_laws
     interpolation = test_evidence(world, TRAIN, seed + 10_000)
     extrapolation = test_evidence(world, EXTRAPOLATE, seed + 20_000)
@@ -133,6 +133,8 @@ def markdown(payload: dict) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--seeds", type=int, default=3)
+    parser.add_argument("--seed-offset", type=int, default=0)
+    parser.add_argument("--pairwise-experiments", type=int, default=24)
     parser.add_argument("--generations", type=int, default=25)
     parser.add_argument("--population", type=int, default=160)
     parser.add_argument("--restarts", type=int, default=2)
@@ -144,9 +146,9 @@ def main() -> None:
     rows = []
     started = time.perf_counter()
     for name in names:
-        for seed in range(args.seeds):
+        for seed in range(args.seed_offset, args.seed_offset + args.seeds):
             config = EngineConfig(regressor=RegressorConfig(generations=args.generations, population=args.population, seed=seed), restarts=args.restarts, seed=seed)
-            row = run_world(worlds[name], seed, config)
+            row = run_world(worlds[name], seed, config, pairwise_experiments=args.pairwise_experiments)
             rows.append(row)
             selected = row["selected"]
             print(f"world={name} seed={seed} method={row['selected_method']} law={selected['expression'] if selected else None} recovered={selected['recovered'] if selected else False} seconds={row['discovery_seconds']:.1f}", flush=True)
@@ -155,6 +157,8 @@ def main() -> None:
     commit = subprocess.run(["/usr/bin/git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
     payload = {
         "seeds": args.seeds,
+        "seed_offset": args.seed_offset,
+        "pairwise_experiments": args.pairwise_experiments,
         "engine": {"generations": args.generations, "population": args.population, "restarts": args.restarts},
         "train_ranges": TRAIN.__dict__,
         "extrapolation_ranges": EXTRAPOLATE.__dict__,

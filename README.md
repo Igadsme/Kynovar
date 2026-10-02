@@ -4,7 +4,7 @@ Autonomous discovery and revision of physical laws in unknown simulated universe
 
 Kynovar is an experimental research system that observes sealed dynamical systems, learns trajectory dynamics, proposes symbolic laws, manages competing hypotheses with uncertainty, selects experiments, searches for counterexamples, detects silent changes in the governing physics, revises theories, and exposes the process through an interactive 3D laboratory.
 
-> **Evidence status:** M1 is accepted. M2-M8 are implemented. Historical M4/M6/M7 and browser evidence are preserved under `results/`; the repository includes a sequential acceptance runner for fresh, uncontended validation. Do not interpret implementation or a historical artifact as a fresh PASS unless `results/acceptance/full.json` records it for the current commit.
+> **Evidence status:** M1-M8 pass the repository's quantitative acceptance criteria. The commands, seeds, thresholds, metrics, artifacts, and tested commit are recorded in `results/acceptance/full.json`.
 
 ## System
 
@@ -28,13 +28,13 @@ The scientist-facing code is intentionally separated from hidden ground truth. H
 | Milestone | Capability | Repository status |
 | --- | --- | --- |
 | M1 | deterministic simulator, hidden universes, laboratory boundary | accepted |
-| M2 | dynamics datasets, CV/linear/MLP/GRU/GNN models, stable-v1, OOD evaluation | implemented; fresh stable-v1 acceptance required |
-| M3 | symbolic regression and law-recovery evaluation | implemented; final rerun required |
-| M4 | hypotheses, uncertainty, evidence lifecycle, scientific notebook | implemented and measured |
-| M5 | passive/random/grid/active experiment campaigns | implemented; clean comparison required |
-| M6 | challenger, prequential tests, counterexample store | implemented and measured |
-| M7 | residual monitoring, change-point estimation, theory versioning | implemented; total-uncertainty validation fix requires fresh seeds |
-| M8 | 3D laboratory, FastAPI/WebSocket backend, Next.js/R3F frontend | implemented; browser evidence preserved |
+| M2 | dynamics datasets, CV/linear/MLP/GRU/GNN models, stable-v1, OOD evaluation | accepted |
+| M3 | symbolic regression and law-recovery evaluation | accepted |
+| M4 | hypotheses, uncertainty, evidence lifecycle, scientific notebook | accepted |
+| M5 | passive/random/grid/active experiment campaigns | accepted |
+| M6 | challenger, prequential tests, counterexample store | accepted |
+| M7 | residual monitoring, change-point estimation, theory versioning | accepted on fresh seeds |
+| M8 | 3D laboratory, FastAPI/WebSocket backend, Next.js/R3F frontend | accepted |
 
 Detailed reports live in `docs/`. Existing results are retained rather than overwritten so preliminary and accepted evidence remain distinguishable.
 
@@ -69,9 +69,11 @@ make acceptance
 
 The full profile additionally executes the stable-v1 dynamics benchmark and OOD suite, final M3 law-recovery run, M4 theory competition, clean M5 strategy comparison, M6 falsification, and M7 revision on a fresh seed range. It stops at the first failed stage and writes `results/acceptance/full.json` with the git commit, runtime, command, artifacts, and PASS/FAIL state.
 
+After those expensive commands have already produced their declared artifacts, `python scripts/acceptance.py --profile full --reuse-artifacts` reruns the Python/frontend checks and quantitatively validates every stored scientific artifact without repeating the campaigns. The ledger explicitly marks reused stages.
+
 A successful process exit alone does not make a scientific result strong; inspect each milestone's measured metrics and report before making a research claim.
 
-The current automated suite contains 125 passing tests across simulation, discovery, theory management, leakage boundaries, the API, and reproducibility.
+The current automated suite contains 126 passing tests across simulation, discovery, theory management, leakage boundaries, the API, and reproducibility.
 
 ## Common commands
 
@@ -153,7 +155,9 @@ Kynovar is a research prototype, not a general-purpose physics engine. The inter
 
 - `docs/milestone-1.md` — simulator and information boundary
 - `docs/milestone-2.md` and `docs/milestone-2-stabilization.md` — dynamics and stable-v1
+- `docs/milestone-3-law-discovery.md` — symbolic law recovery
 - `docs/milestone-4-scientific-reasoning.md` — hypotheses and uncertainty
+- `docs/milestone-5-active-selection.md` — active experiment selection
 - `docs/milestone-6-falsification.md` — counterexample search
 - `docs/milestone-7-theory-revision.md` — change detection and revision
 - `docs/milestone-8-interactive-lab.md` — 3D/API/frontend evidence

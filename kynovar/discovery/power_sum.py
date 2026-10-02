@@ -114,7 +114,7 @@ def to_expression(specs, params) -> sympy.Expr:
     return expression
 
 
-def power_sum_search(train_data, train_y, validation_data, validation_y, variables: tuple[str, ...], max_terms: int = 3, improvement: float = 0.5, complexity_penalty: float = 2e-3) -> dict:
+def power_sum_search(train_data, train_y, validation_data, validation_y, variables: tuple[str, ...], max_terms: int = 3, improvement: float = 0.5) -> dict:
     """Forward selection of monomial terms, stopped on held-out error."""
     started = time.perf_counter()
     w = weights_for(train_y)
@@ -144,9 +144,12 @@ def power_sum_search(train_data, train_y, validation_data, validation_y, variabl
         trial, fitted, error = step_best
         prediction = _evaluate(trial, fitted, validation_data, validation_y.shape[0])
         validation_error = weighted_nmse(prediction, validation_y, vw) if np.isfinite(prediction).all() else float("inf")
-        complexity = sum(2 + 3 * len(s.positive) + (2 if s.signed else 0) for s in trial)
         history.append({"terms": [s.label() for s in trial], "train_nmse": error, "validation_nmse": validation_error})
-        if chosen and not validation_error + complexity_penalty * complexity < improvement * (best_validation + complexity_penalty * _complexity(chosen)):
+        # Forward selection answers only whether another term explains held-out
+        # signal. Complexity is applied once by SymbolicDiscoveryEngine when it
+        # ranks completed laws; including it here can reject an exact second
+        # term even when validation error falls effectively to zero.
+        if chosen and not validation_error < improvement * best_validation:
             break
         chosen, params, best_validation = trial, fitted, validation_error
         if best_validation < 1e-14:

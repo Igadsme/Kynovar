@@ -38,6 +38,7 @@ results/*
 !results/research/
 !results/visual/
 !results/demo/
+!results/acceptance/
 logs/**
 frontend/node_modules/
 frontend/.next/

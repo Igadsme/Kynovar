@@ -102,7 +102,15 @@ On clean two-body data the GNN learns the interaction: acceleration R² = 0.994,
 
 ## 2.7 stable-v1 benchmark
 
-PENDING — the benchmark and OOD evaluation were running when this section was drafted. This section will be filled from `results/benchmarks/stable-v1/benchmark.json` and `results/ood/stable-v1/ood.json` once they exist.
+Final artifacts: `results/benchmarks/stable-v1/benchmark.json` and `results/ood/stable-v1/ood.json`.
+
+- The universe split is 56 train / 12 validation / 12 test, with all seven declared models present.
+- The interaction GNN reaches one-step acceleration R² = 0.9106.
+- Its 100-step bounded position RMSE is 0.05698, versus 0.19111 for constant velocity (ratio 0.2982).
+- Across the nine declared OOD regimes, the median bounded-position RMSE ratio to constant velocity is 0.3219 and the learned model wins 7 / 9 regimes.
+- The extreme regime ratio is 8.10. This is a measured failure outside the stabilized training envelope, not hidden by the aggregate result.
+
+These results pass the predeclared acceptance gates: R² ≥ 0.50, in-distribution long-horizon ratio ≤ 0.80, OOD median ratio ≤ 1.0, and at least five OOD wins.
 
 ## Limitations
 

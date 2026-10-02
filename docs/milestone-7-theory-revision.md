@@ -1,6 +1,6 @@
 # Milestone 7 — Theory Revision
 
-Status: implemented and measured. Source: `results/theory_shift/m7/theory_shift.json`.
+Status: accepted on fresh seeds. Historical source: `results/theory_shift/m7/theory_shift.json`. Final source: `results/theory_shift/m7-final/theory_shift.json`.
 
 ## Setting
 
@@ -44,7 +44,17 @@ No false alarm led to adopting a wrong law: every adopted v2 in the change strea
 
 Seed 9 detected the change after 1 experiment, and all three investigations found the correct law (`2.52 m1 m2 / r^1.508`, `2.50 / r^1.502`, `2.50 / r^1.504`). Each candidate supported all 3 validation experiments while the old law was contradicted. Every candidate was rejected by the sharpness test. The reference absolute noise fitted on the first 6 experiments was unusually small: a = 0.0034, the smallest of the 32 reference values across all investigations (median 0.0087, max 0.0131). The candidates' absolute-noise terms (0.008–0.022) exceeded 2× that value, while their relative terms were below the reference.
 
-The maximum-likelihood fit can trade noise between the absolute and the relative component, so a component-wise comparison is brittle. A likely fix is to compare the total predicted σ on the investigation data. That fix was designed after seeing this failure. It has not been evaluated, and it must be tested on fresh seeds rather than on these 20. The 19/20 result stands as measured.
+The maximum-likelihood fit can trade noise between the absolute and the relative component, so a component-wise comparison is brittle. The resulting fix compares total predicted σ on the investigation data. At the time of this historical run it had not been evaluated; the original 19/20 measurement remains preserved above, and the disjoint validation below tests the fix without reusing those seeds.
+
+## Fresh validation after the uncertainty fix
+
+The total-predictive-uncertainty validation was evaluated on disjoint change seeds 2000–2019 and control seeds 3000–3019:
+
+```bash
+.venv/bin/python scripts/theory_shift.py --seeds 20 --seed-offset 2000 --out results/theory_shift/m7-final
+```
+
+All 20 changes were detected, all 20 replacements were validated, and all 20 final laws recovered the new structure. Mean detection delay was 2.0 experiments, mean absolute change-point error was 0, and no incorrect replacement was adopted. The control false-alarm upper-bound rate was 0.00658 per monitored experiment, below the 0.01 acceptance limit. These fresh results supersede the earlier pending-validation statement without altering the historical artifact above.
 
 ## Limitations
 

@@ -83,6 +83,7 @@ def _expr(loop, index):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--seeds", type=int, default=10)
+    parser.add_argument("--seed-offset", type=int, default=0)
     parser.add_argument("--budget", type=int, default=50)
     parser.add_argument("--change-after", type=int, default=24)
     parser.add_argument("--k", type=float, default=2.5)
@@ -93,7 +94,7 @@ def main() -> None:
     instrument = Instrument(acceleration_noise=0.005, relative_acceleration_noise=0.03)
     rows = {"change": [], "control": []}
     started = time.perf_counter()
-    for seed in range(args.seeds):
+    for seed in range(args.seed_offset, args.seed_offset + args.seeds):
         change = run(seed, args.k, args.p_before, args.p_after, args.change_after, args.budget, instrument)
         rows["change"].append(change)
         print(f"change seed={seed} alarms={change['alarms']} delay={change['detection_delay_experiments']} est_err={change['change_estimate_error']} final={change.get('final_equation')} recovered={change['final_recovered_new_law']}", flush=True)
@@ -105,7 +106,7 @@ def main() -> None:
     delays = [r["detection_delay_experiments"] for r in change if r["detection_delay_experiments"] is not None]
     errors = [r["change_estimate_error"] for r in change if r["change_estimate_error"] is not None]
     summary = {
-        "setting": {"k": args.k, "p_before": args.p_before, "p_after": args.p_after, "change_after": args.change_after, "budget": args.budget, "instrument": instrument.to_dict(), "monitor": "one-sided CUSUM on log mean z^2, k=0.5, h=5, 6 warm-up experiments"},
+        "setting": {"k": args.k, "p_before": args.p_before, "p_after": args.p_after, "change_after": args.change_after, "budget": args.budget, "seed_offset": args.seed_offset, "instrument": instrument.to_dict(), "monitor": "one-sided CUSUM on log mean z^2, k=0.5, h=5, 6 warm-up experiments"},
         "control_streams": len(control),
         "control_streams_with_false_alarm": int(sum(r["false_alarms"] > 0 for r in control)),
         "control_false_alarms_total": int(sum(r["false_alarms"] for r in control)),
