@@ -1,0 +1,491 @@
+{
+  "schema_version": 2,
+  "profile": "full",
+  "reuse_artifacts": true,
+  "status": "PASS",
+  "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+  "python": "3.12.4",
+  "timestamp": "2026-10-01T23:39:50-0400",
+  "milestones": {
+    "M1": "PASS",
+    "M2": "PASS",
+    "M3": "PASS",
+    "M4": "PASS",
+    "M5": "PASS",
+    "M6": "PASS",
+    "M7": "PASS",
+    "M8": "PASS"
+  },
+  "stages": [
+    {
+      "milestone": "M1",
+      "name": "Python/API test suite",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "-m",
+        "pytest"
+      ],
+      "artifacts": [],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "scope": "simulator, information boundary, discovery, theory, API, WebSocket, 2D/3D"
+      },
+      "seeds": {},
+      "evaluator": null,
+      "thresholds": {},
+      "seconds": 38.63154245898477,
+      "returncode": 0,
+      "status": "PASS",
+      "metrics": {},
+      "error": null
+    },
+    {
+      "milestone": "M8",
+      "name": "Frontend clean install, typecheck, and production build",
+      "command": [
+        "sh",
+        "scripts/frontend_verify.sh"
+      ],
+      "artifacts": [],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "runtime": "docker-node22"
+      },
+      "seeds": {},
+      "evaluator": null,
+      "thresholds": {},
+      "seconds": 132.387804375001,
+      "returncode": 0,
+      "status": "PASS",
+      "metrics": {},
+      "error": null
+    },
+    {
+      "milestone": "M2",
+      "name": "stable-v1 dynamics benchmark",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "scripts/run_benchmark.py",
+        "--config",
+        "configs/experiments/stable-v1.yaml"
+      ],
+      "artifacts": [
+        "results/benchmarks/stable-v1/benchmark.json",
+        "results/benchmarks/stable-v1/benchmark.md"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "file": "configs/experiments/stable-v1.yaml",
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {
+        "dataset": 101,
+        "split": 101,
+        "train": 101
+      },
+      "evaluator": "benchmark",
+      "thresholds": {
+        "required_models": [
+          "constant_velocity",
+          "linear",
+          "mlp",
+          "gru",
+          "gnn",
+          "interaction_gnn_single",
+          "interaction_gnn"
+        ],
+        "min_one_step_acceleration_r2": 0.5,
+        "max_long_horizon_rmse_ratio": 0.8
+      },
+      "seconds": 0.054724875022657216,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "dataset": "stable-v1",
+        "target_model": "interaction_gnn",
+        "split_universes": {
+          "train": 56,
+          "validation": 12,
+          "test": 12
+        },
+        "one_step_acceleration_r2": 0.9106410481220034,
+        "long_horizon": 100,
+        "long_horizon_position_rmse": 0.05697847477431452,
+        "constant_velocity_position_rmse": 0.19110591948218544,
+        "position_rmse_ratio": 0.2981512813873144,
+        "models": [
+          "constant_velocity",
+          "gnn",
+          "gru",
+          "interaction_gnn",
+          "interaction_gnn_single",
+          "linear",
+          "mlp"
+        ]
+      },
+      "error": null
+    },
+    {
+      "milestone": "M2",
+      "name": "stable-v1 OOD evaluation",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "scripts/run_ood.py",
+        "--config",
+        "configs/experiments/stable-v1.yaml"
+      ],
+      "artifacts": [
+        "results/ood/stable-v1/ood.json",
+        "results/ood/stable-v1/ood.md"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "file": "configs/experiments/stable-v1.yaml",
+        "OOD": true,
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {
+        "base": 101
+      },
+      "evaluator": "ood",
+      "thresholds": {
+        "required_scenarios": [
+          "exponent_near",
+          "exponent_moderate",
+          "coefficient",
+          "mass",
+          "velocity",
+          "body_count",
+          "long_horizon",
+          "challenging_regime",
+          "extreme_regime"
+        ],
+        "max_median_rmse_ratio": 1.0,
+        "min_scenarios_beating_baseline": 5
+      },
+      "seconds": 0.024589792010374367,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "scenarios": [
+          "exponent_near",
+          "exponent_moderate",
+          "coefficient",
+          "mass",
+          "velocity",
+          "body_count",
+          "long_horizon",
+          "challenging_regime",
+          "extreme_regime"
+        ],
+        "bounded_position_rmse_ratios": [
+          0.23532185627360966,
+          0.3219399383913485,
+          0.19874995429942716,
+          0.16149663152537247,
+          0.12820021643576562,
+          0.4180681269676563,
+          1.0197080746035,
+          0.945470552930876,
+          8.102872654031646
+        ],
+        "median_rmse_ratio": 0.3219399383913485,
+        "scenarios_beating_constant_velocity": 7
+      },
+      "error": null
+    },
+    {
+      "milestone": "M3",
+      "name": "law recovery final",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "scripts/discover_laws.py",
+        "--seeds",
+        "5",
+        "--seed-offset",
+        "200",
+        "--pairwise-experiments",
+        "36",
+        "--out",
+        "results/discovery/m3-final"
+      ],
+      "artifacts": [
+        "results/discovery/m3-final/law_recovery.json",
+        "results/discovery/m3-final/law_recovery.md"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "pairwise_experiment_attempts": 36,
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {
+        "range": [
+          200,
+          204
+        ]
+      },
+      "evaluator": "m3",
+      "thresholds": {
+        "min_seeds": 5,
+        "min_structural_recovery_rate": 0.8,
+        "min_full_recovery_rate": 0.8,
+        "max_normalized_test_rmse": 0.1
+      },
+      "seconds": 0.03624141600448638,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "worlds": 8,
+        "seeds_per_world": 5,
+        "minimum_structural_recovery_rate": 1.0,
+        "minimum_full_recovery_rate": 1.0,
+        "max_normalized_test_rmse": 5.304912100896586e-09,
+        "max_coefficient_relative_error": 5.304913486270379e-09,
+        "max_exponent_absolute_error": 9.103828801926284e-14
+      },
+      "error": null
+    },
+    {
+      "milestone": "M4",
+      "name": "theory competition",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "scripts/theory_competition.py",
+        "--seeds",
+        "5"
+      ],
+      "artifacts": [
+        "results/theory/m4/theory_competition.json"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {
+        "range": [
+          0,
+          4
+        ]
+      },
+      "evaluator": "m4",
+      "thresholds": {
+        "min_acceptance_rate": 0.8,
+        "min_leader_match_rate": 1.0,
+        "min_competing_rate": 1.0,
+        "max_calibration_absolute_error": 0.15
+      },
+      "seconds": 0.029149499983759597,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "seeds": 5,
+        "acceptance_rate": 1.0,
+        "strict_acceptance_rate": 0.4,
+        "leader_structure_match_rate": 1.0,
+        "early_two_plausible_rate": 1.0,
+        "max_calibration_absolute_error": 0.06249174917491751
+      },
+      "error": null
+    },
+    {
+      "milestone": "M5",
+      "name": "active vs random/passive selection",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "scripts/active_experiments.py",
+        "--seeds",
+        "10",
+        "--out",
+        "results/planning/m5-final"
+      ],
+      "artifacts": [
+        "results/planning/m5-final/active_experiments.json",
+        "results/planning/m5-final/active_experiments.md"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {
+        "range": [
+          0,
+          9
+        ]
+      },
+      "evaluator": "m5",
+      "thresholds": {
+        "min_seeds_per_world": 10,
+        "min_active_recovery_rate": 0.8,
+        "max_active_to_random_experiment_ratio": 0.95
+      },
+      "seconds": 0.04217787500238046,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "worlds": 2,
+        "minimum_seeds_per_world": 10,
+        "active_identified": 20,
+        "random_identified": 20,
+        "active_recovery_rate": 1.0,
+        "active_mean_experiments": 3.35,
+        "random_mean_experiments": 4.0,
+        "passive_mean_experiments": 5.35,
+        "active_to_random_experiment_ratio": 0.8375
+      },
+      "error": null
+    },
+    {
+      "milestone": "M6",
+      "name": "falsification",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "scripts/falsification.py",
+        "--seeds",
+        "8"
+      ],
+      "artifacts": [
+        "results/falsification/m6/falsification.json"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {
+        "range": [
+          0,
+          7
+        ]
+      },
+      "evaluator": "m6",
+      "thresholds": {
+        "min_seeds": 8,
+        "min_materially_wrong_contradiction_rate": 0.75,
+        "max_true_structure_false_contradictions": 0,
+        "min_correct_leader_rate": 0.875
+      },
+      "seconds": 0.03428062499733642,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "seeds": 8,
+        "materially_wrong_contradiction_rate": 1.0,
+        "true_structure_false_contradictions": 0,
+        "correct_leader_rate": 1.0,
+        "criteria_observed": [
+          "disagreement",
+          "extrapolation",
+          "random",
+          "uncertainty",
+          "weakly_observed"
+        ]
+      },
+      "error": null
+    },
+    {
+      "milestone": "M7",
+      "name": "theory revision fresh seeds",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "scripts/theory_shift.py",
+        "--seeds",
+        "20",
+        "--seed-offset",
+        "2000",
+        "--out",
+        "results/theory_shift/m7-final"
+      ],
+      "artifacts": [
+        "results/theory_shift/m7-final/theory_shift.json"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {
+        "change": [
+          2000,
+          2019
+        ],
+        "control": [
+          3000,
+          3019
+        ]
+      },
+      "evaluator": "m7",
+      "thresholds": {
+        "min_streams": 20,
+        "min_change_seed": 2000,
+        "min_control_seed": 3000,
+        "min_detection_rate": 0.95,
+        "min_adoption_rate": 0.95,
+        "min_revised_recovery_rate": 0.95,
+        "max_control_false_alarm_rate": 0.01,
+        "max_mean_detection_delay": 5.0,
+        "max_mean_abs_change_point_error": 2.0,
+        "max_incorrect_replacements": 0
+      },
+      "seconds": 0.038263625028776005,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "change_seed_range": [
+          2000,
+          2019
+        ],
+        "control_seed_range": [
+          3000,
+          3019
+        ],
+        "change_streams": 20,
+        "control_streams": 20,
+        "detected": 20,
+        "mean_detection_delay": 2.0,
+        "control_false_alarm_rate": 0.006578947368421052,
+        "mean_abs_change_point_error": 0.0,
+        "replacement_validated": 20,
+        "final_recovered_new_law": 20,
+        "incorrect_replacements": 0
+      },
+      "error": null
+    },
+    {
+      "milestone": "M8",
+      "name": "interactive laboratory evidence",
+      "command": [
+        "/Volumes/T7 Shield/KYNOVAR/.venv/bin/python",
+        "-c",
+        "print('validate existing M8 evidence')"
+      ],
+      "artifacts": [
+        "results/interactive/m8/e2e_run.json"
+      ],
+      "config": {
+        "git_commit": "c4366eb8a5d24619e03f02f3197d3e9d37e031f7",
+        "execution": "validated_existing_artifacts"
+      },
+      "seeds": {},
+      "evaluator": "m8",
+      "thresholds": {
+        "status": "CONVERGED",
+        "theory_state": "SUPPORTED"
+      },
+      "seconds": 0.0144505409989506,
+      "returncode": null,
+      "status": "PASS",
+      "metrics": {
+        "status": "CONVERGED",
+        "theory_state": "SUPPORTED",
+        "experiments": 12,
+        "usable_experiments": 9,
+        "criteria": [
+          "uncertainty",
+          "disagreement",
+          "extrapolation",
+          "weakly_observed"
+        ],
+        "evaluation_present": true
+      },
+      "error": null
+    }
+  ]
+}
